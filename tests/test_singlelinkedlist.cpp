@@ -6,7 +6,7 @@
 //  Copyright © 2018 Robert Sandilands. All rights reserved.
 //
 #include "../3rdparty/Catch2/single_include/catch.hpp"
-#include "singlelinkedlist.hpp"
+#include "../include/singlelinkedlist.hpp"
 
 TEST_CASE("Empty list tests", "[single_linked_list]") {
     GIVEN("An empty list") {

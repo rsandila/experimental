@@ -1,0 +1,6 @@
+Makefile
+bin/
+obj/
+*.make
+*.xcodeproj/
+experimental.xcworkspace/

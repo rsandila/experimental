@@ -23,7 +23,7 @@ workspace "experimental"
 	filter "configurations:64bit"
 		architecture ( "x86_64" )
 
-  project "traffic-light-controller"
+  project "experimental-tests"
     kind "ConsoleApp"
     language "C++"
     files { "include/**.h", "tests/**.cpp" }
