@@ -3,4 +3,5 @@ bin/
 obj/
 *.make
 *.xcodeproj/
-experimental.xcworkspace/
+*.xcworkspace/
+experimental/
