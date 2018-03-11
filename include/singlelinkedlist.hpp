@@ -5,12 +5,15 @@
 //  Created by Robert Sandilands on 3/6/18.
 //  Copyright © 2018 Robert Sandilands. All rights reserved.
 //
+//  Check LICENSE file for License
+#pragma once
+
 #include <functional>
 #include <exception>
 
 namespace experimental {
     template <class T> class SingleLinkedListIterator;
-    
+
     template <class T> class SingleLinkedList {
     private:
         template <class TPriv> class Element {
@@ -25,7 +28,7 @@ namespace experimental {
         };
         Element<T> * head;
         Element<T> * cursor;
-        
+
         void resetConditionally(bool always = false) noexcept {
             if (always || !cursor) {
                 cursor = head;
@@ -152,7 +155,7 @@ namespace experimental {
             return SingleLinkedListIterator<T>(*this, true);
         }
     };
-    
+
     template <class T> class SingleLinkedListIterator {
     private:
         SingleLinkedList<T> & list;
@@ -163,9 +166,9 @@ namespace experimental {
         bool operator != (const SingleLinkedListIterator & other) const noexcept {
             if (endValue == other.endValue) {
                 if (endValue) {
-                    return false; // both at the end
+                    return false;  // both at the end
                 } else {
-                    return true; // technically not true, but should be sufficient
+                    return true;  // technically not true, but should be sufficient
                 }
             }
             if (endValue) {

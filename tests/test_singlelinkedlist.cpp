@@ -5,6 +5,8 @@
 //  Created by Robert Sandilands on 3/7/18.
 //  Copyright © 2018 Robert Sandilands. All rights reserved.
 //
+//  Check LICENSE file for License
+
 #include "../3rdparty/Catch2/single_include/catch.hpp"
 #include "../include/singlelinkedlist.hpp"
 
@@ -12,7 +14,7 @@ TEST_CASE("Empty list tests", "[single_linked_list]") {
     GIVEN("An empty list") {
         experimental::SingleLinkedList<int> test;
         REQUIRE(test.isEmpty());
-        
+
         WHEN("An item is added") {
             test.push(10);
             THEN("The list is no longer empty") {
@@ -56,7 +58,6 @@ TEST_CASE("Empty list tests", "[single_linked_list]") {
             THEN("We still find nothing") {
                 REQUIRE_FALSE(test.findNext([](int){ return true;}));
             }
-            
         }
     }
 }
@@ -150,10 +151,10 @@ TEST_CASE("test insert", "[single_linked_list]") {
         REQUIRE(test.isEmpty());
         WHEN("Insert a single entry") {
             test.insert(10);
-            THEN ("It is no longer empty") {
+            THEN("It is no longer empty") {
                 REQUIRE_FALSE(test.isEmpty());
             }
-            THEN ("It contains a single entry") {
+            THEN("It contains a single entry") {
                 REQUIRE(test.next() == 10);
                 REQUIRE_FALSE(test.hasNext());
             }
@@ -200,7 +201,6 @@ TEST_CASE("test insert", "[single_linked_list]") {
             WHEN("We try to find the last item and then insert") {
                 REQUIRE(test.find([](int val){ return val == 21;}));
                 test.insert(26);
-                
                 THEN("We expect the new item to be at the end") {
                     test.reset();
                     for (auto i: {3,6,9,12,15,18,21,26}) {
@@ -223,7 +223,7 @@ TEST_CASE("test insert", "[single_linked_list]") {
     }
 }
 
-TEST_CASE("test remove","[single_linked_list]") {
+TEST_CASE("test remove", "[single_linked_list]") {
     GIVEN("An empty list") {
         experimental::SingleLinkedList<int> test;
         REQUIRE(test.isEmpty());
@@ -340,4 +340,3 @@ TEST_CASE("iterator","[single_linked_list]") {
         }
     }
 }
-
