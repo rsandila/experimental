@@ -22,6 +22,15 @@ Run "premake5 gmake" to get a set of Makefiles. "premake5 xcode4" for XCode or
 
 I have only tested on OS X with gmake and XCode.
 
+## documentation
+
+You need Doxygen and Moxygen
+
+1. http://www.stack.nl/~dimitri/doxygen/index.html
+2. https://github.com/sourcey/moxygen
+
+Run `doxygen` followed by `moxygen --output Documentation.md xml/`. This will generate the `Documentation.md` and `html/index.html` containing the documentation.
+
 ## Contents
 
 ### singlelinkedlist.hpp

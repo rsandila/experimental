@@ -13,9 +13,15 @@
 
 namespace experimental {
     template <class T> class SingleLinkedListIterator;
+    /*! \brief A single linked list
 
+        A single linked list is one that can only be traversed in one direction.
+        It can be used as a stack. Inserts and removes are extremely fast.
+        Find is linear.
+    */
     template <class T> class SingleLinkedList {
     private:
+        SingleLinkedList(const SingleLinkedList& that) = delete;  // do not allow copy
         template <class TPriv> class Element {
         private:
             Element<TPriv> * next;
@@ -35,12 +41,22 @@ namespace experimental {
             }
         }
     public:
+        /*! \brief Default constructors
+            Creates a new empty SingleLinkedList
+        */
         SingleLinkedList() noexcept : head(new Element<T>()), cursor(nullptr) {}
+        /*! \brief Initializer constructor
+
+            Creates a new SingleLinkedList and push() the initialValues
+
+            \param initialValues Values to be added to the list at construction time
+        */
         SingleLinkedList(std::initializer_list<T> initialValues) noexcept : head(new Element<T>()), cursor(nullptr) {
             for (auto item: initialValues) {
                 push(item);
             }
         }
+        /// Destructor
         virtual ~SingleLinkedList() noexcept {
             while (!isEmpty()) {
                 pop();
@@ -48,11 +64,15 @@ namespace experimental {
             delete head;
             head = cursor = nullptr;
         }
-        // insert a new item at head
+        /*! \brief Insert a new item at head
+          \param value Value of new element
+        */
         void push(T value) noexcept(false) {
             head = new Element<T>(head, value);
         }
-        // insert new item at cursor as the next item, if cursor == null then do a push
+        /*! \brief Insert new item at cursor as the next item, if cursor == null then do a push
+          \param value Value of the new element
+        */
         void insert(T value) noexcept(false) {
             if (!cursor) {
                 push(value);
@@ -64,16 +84,23 @@ namespace experimental {
                 }
             }
         }
-        // reset iteration of the list to head
+        /// Reset iteration of the list to head
         void reset() noexcept {
             resetConditionally(true);
         }
-        // Is there a next item in the list
+        /*! \brief Is there a next item in the list?
+          \returns true if we are not at the end of the lists
+          */
         bool hasNext() noexcept {
             resetConditionally();
             return cursor->getNext() != nullptr;
         }
-        // return the next item without modifying the list
+        /*! \brief Return the current item while advancing the cursor
+
+          Does not modify the list but it does advance the cursor
+
+          \returns The value of the current element
+          */
         T next() noexcept(false) {
             resetConditionally();
             if (cursor->getNext() == nullptr) {
@@ -83,15 +110,26 @@ namespace experimental {
             cursor = cursor->getNext();
             return retval;
         }
+        /*! \brief Return the current item
+
+          Does not modify the list or advance the cursor
+
+          \returns The value of the current element
+          */
         T current() noexcept {
             resetConditionally();
             return cursor->getValue();
         }
-        // return true if the list is empty
+        /*! Is the list empty?
+
+        \returns Return true if the list is empty
+        */
         bool isEmpty() const noexcept {
             return head->getNext() == nullptr;
         }
-        // remove head and return its value
+        /*! \brief Remove first item and return its value
+          \returns Value of first item
+          */
         T pop() noexcept(false) {
             Element<T> * newNext = head->getNext();
             if (newNext) {
@@ -104,7 +142,11 @@ namespace experimental {
                 throw std::out_of_range("Trying to pop too many entries");
             }
         }
-        // remove current cursor
+        /*! \brief Remove element at cursor
+
+          If the cursor is at an invalid position may throw
+          an exception
+          */
         void remove() noexcept(false) {
             if (cursor) {
                 Element<T> * item = head;
@@ -132,12 +174,23 @@ namespace experimental {
                 throw std::out_of_range("Cursor not set");
             }
         }
-        // resets cursor and iterates list until test() == true.
+        /*! \brief resets cursor and iterates list until test() == true
+
+          \param test Lamba/function that will be called with values until it
+                      returns true.
+
+          \return True if test returned true.
+        */
         bool find(std::function<bool(T)> test) noexcept {
             resetConditionally(true);
             return findNext(test);
         }
-        // iterastes list until test() == true without resetting the cursor
+        /*! \brief Iterates list until test returns true
+        \param test Lamba/function that will be called with values until it
+                    returns true.
+
+        \return True if test returned true.
+      */
         bool findNext(std::function<bool(T)> test) noexcept {
             while (hasNext()) {
                 if (test(cursor->getValue())) {
@@ -147,22 +200,49 @@ namespace experimental {
             }
             return false;
         }
+        /*! \brief Returns iterator for use in loops
+
+              Resets the cursor and returns iterator
+
+            \returns SingleLinkedListIterator
+        */
         SingleLinkedListIterator<T> begin() noexcept {
             resetConditionally(true);
             return SingleLinkedListIterator<T>(*this, false);
         }
+        /*! \brief Returns end iterator for use in loops
+
+          \returns SingleLinkedListIterator
+        */
         const SingleLinkedListIterator<T> end() noexcept {
             return SingleLinkedListIterator<T>(*this, true);
         }
     };
+    /*! \brief Iterator helper for SingleLinkedList
 
+      If `list` is of type SingleLinkedList then it is used in one of two ways:
+
+      1. `for (auto i: list) { ... }`
+      2. `for (auto i = list.begin(); i != list.end(); i++) { ... }`
+    */
     template <class T> class SingleLinkedListIterator {
     private:
         SingleLinkedList<T> & list;
         bool endValue;
     public:
+      /*! \brief Constructor
+
+          \param value SingleLinkedList used by iterator
+          \param end Is this the end marker?
+      */
         SingleLinkedListIterator(SingleLinkedList<T> & value, bool end) noexcept : list(value), endValue(end) {
         }
+        /*! \brief Comparison operator
+
+            \param other Other SingleLinkedList used to compare
+
+            \returns Returns false if we are at the end of the list
+        */
         bool operator != (const SingleLinkedListIterator & other) const noexcept {
             if (endValue == other.endValue) {
                 if (endValue) {
@@ -179,14 +259,24 @@ namespace experimental {
                 return list.hasNext();
             }
         }
+        /*! \brief Advances the iterator
+          \returns The current value
+        */
         T operator ++() noexcept {
             return list.next();
         }
+        /*! \brief Advances the iterator
+          \returns The current value
+        */
         T operator ++(int) noexcept {
             T retval = list.current();
             ++(*this);
             return retval;
         }
+        /*! \brief Pointer operator used by loops
+
+        \returns The current value
+        */
         T operator*() noexcept {
             return list.current();
         }
