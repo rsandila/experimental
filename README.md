@@ -11,7 +11,7 @@ If it works, good. If it doesn't, file a ticket. I may fix it.
 
 ## License
 
-3-Clause BSD
+[3-Clause BSD](blob/master/LICENSE)
 
 ## Building it
 
@@ -29,7 +29,9 @@ You need Doxygen and Moxygen
 1. http://www.stack.nl/~dimitri/doxygen/index.html
 2. https://github.com/sourcey/moxygen
 
-Run `doxygen` followed by `moxygen --output Documentation.md xml/`. This will generate the `Documentation.md` and `html/index.html` containing the documentation.
+Run `./makedcs.sh`. This will generate the `Documentation.md` and `html/index.html` containing the documentation.
+
+The markup version is checked into the repository as [Documentation.md](blob/master/Documentation.md).
 
 ## Contents
 
