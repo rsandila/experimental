@@ -11,12 +11,12 @@
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`class `[`experimental::SingleLinkedList`](#classexperimental_1_1_single_linked_list) | A single linked lists.
+`class `[`experimental::SingleLinkedList`](#classexperimental_1_1_single_linked_list) | A single linked list.
 `class `[`experimental::SingleLinkedListIterator`](#classexperimental_1_1_single_linked_list_iterator) | Iterator helper for [SingleLinkedList](#classexperimental_1_1_single_linked_list).
 
 # class `experimental::SingleLinkedList` 
 
-A single linked lists.
+A single linked list.
 
 A single linked list is one that can only be traversed in one direction. It can be used as a stack. Inserts and removes are extremely fast. Find is linear.
 

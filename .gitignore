@@ -5,3 +5,7 @@ obj/
 *.xcodeproj/
 *.xcworkspace/
 experimental/
+html/
+xml/
+Doxyfile.bak
+
