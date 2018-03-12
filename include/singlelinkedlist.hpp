@@ -21,7 +21,6 @@ namespace experimental {
     */
     template <class T> class SingleLinkedList {
     private:
-        SingleLinkedList(const SingleLinkedList& that) = delete;  // do not allow copy
         template <class TPriv> class Element {
         private:
             Element<TPriv> * next;
@@ -55,6 +54,38 @@ namespace experimental {
             for (auto item: initialValues) {
                 push(item);
             }
+        }
+        /*! \brief Copy constructor
+            \param that SingleLinkedList to be copied
+         */
+        SingleLinkedList(const SingleLinkedList& that) noexcept(false) {
+            cursor = nullptr; // TODO - feasible to copy the cursor?
+            head = new Element<T>();
+            Element<T> * thatCursor = that.head;
+            if (!thatCursor) {
+                throw std::invalid_argument("Copying SingleLinkedList without a head");
+            }
+            if (thatCursor->getNext()) {
+                push(thatCursor->getValue());
+                thatCursor = thatCursor->getNext();
+            }
+            Element<T> * originalHead = head->getNext();
+            Element<T> * myCursor = head;
+            while (thatCursor->getNext()) {
+                myCursor->setNext(new Element<T>(originalHead, thatCursor->getValue()));
+                myCursor = myCursor->getNext();
+                thatCursor = thatCursor->getNext();
+            }
+        }
+        /*! \brief Move constructor
+         
+            Leaves the original list empty, but valid and moves the original list to the new list
+         
+            \param that SingleLinkedList to be moved
+         */
+        SingleLinkedList(SingleLinkedList && that) noexcept : head(that.head), cursor(that.cursor) {
+            that.cursor = nullptr;
+            that.head = new Element<T>();
         }
         /// Destructor
         virtual ~SingleLinkedList() noexcept {

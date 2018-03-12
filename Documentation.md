@@ -26,6 +26,8 @@ A single linked list is one that can only be traversed in one direction. It can 
 --------------------------------|---------------------------------------------
 `public inline  `[`SingleLinkedList`](#classexperimental_1_1_single_linked_list_1a5efd9ecfa26ebe68da0b34f75daa14d1)`() noexcept` | Default constructors Creates a new empty [SingleLinkedList](#classexperimental_1_1_single_linked_list).
 `public inline  `[`SingleLinkedList`](#classexperimental_1_1_single_linked_list_1aa56386b0d9297264e246e709a26ffd2a)`(std::initializer_list< T > initialValues) noexcept` | Initializer constructor.
+`public inline  `[`SingleLinkedList`](#classexperimental_1_1_single_linked_list_1abc4c8fd989aedb94d72543dcbaaab9b3)`(const `[`SingleLinkedList`](#classexperimental_1_1_single_linked_list)` & that)` | Copy constructor.
+`public inline  `[`SingleLinkedList`](#classexperimental_1_1_single_linked_list_1af1b55421626b7c0ce148d3b933b20853)`(`[`SingleLinkedList`](#classexperimental_1_1_single_linked_list)` && that) noexcept` | Move constructor.
 `public inline virtual  `[`~SingleLinkedList`](#classexperimental_1_1_single_linked_list_1aaa7e76f3ec9637075a41a6b1c00126e4)`() noexcept` | Destructor.
 `public inline void `[`push`](#classexperimental_1_1_single_linked_list_1a26826c880617830b5b445f2efcee2bb7)`(T value)` | Insert a new item at head.
 `public inline void `[`insert`](#classexperimental_1_1_single_linked_list_1a6f8023e7603755d82ef0a6c1acc43ea1)`(T value)` | Insert new item at cursor as the next item, if cursor == null then do a push.
@@ -55,6 +57,22 @@ Creates a new [SingleLinkedList](#classexperimental_1_1_single_linked_list) and 
 
 #### Parameters
 * `initialValues` Values to be added to the list at construction time
+
+#### `public inline  `[`SingleLinkedList`](#classexperimental_1_1_single_linked_list_1abc4c8fd989aedb94d72543dcbaaab9b3)`(const `[`SingleLinkedList`](#classexperimental_1_1_single_linked_list)` & that)` 
+
+Copy constructor.
+
+#### Parameters
+* `that` [SingleLinkedList](#classexperimental_1_1_single_linked_list) to be copied
+
+#### `public inline  `[`SingleLinkedList`](#classexperimental_1_1_single_linked_list_1af1b55421626b7c0ce148d3b933b20853)`(`[`SingleLinkedList`](#classexperimental_1_1_single_linked_list)` && that) noexcept` 
+
+Move constructor.
+
+Leaves the original list empty, but valid and moves the original list to the new list
+
+#### Parameters
+* `that` [SingleLinkedList](#classexperimental_1_1_single_linked_list) to be moved
 
 #### `public inline virtual  `[`~SingleLinkedList`](#classexperimental_1_1_single_linked_list_1aaa7e76f3ec9637075a41a6b1c00126e4)`() noexcept` 
 

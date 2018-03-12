@@ -26,5 +26,4 @@ workspace "experimental"
   project "experimental-tests"
     kind "ConsoleApp"
     language "C++"
-    files { "include/**.h", "tests/**.cpp" }
-    
+    files { "include/**.hpp", "tests/**.cpp" }

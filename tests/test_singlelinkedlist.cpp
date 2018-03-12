@@ -340,3 +340,60 @@ TEST_CASE("iterator","[single_linked_list]") {
         }
     }
 }
+
+TEST_CASE("Copy constructor","[single_linked_list]") {
+    GIVEN("An empty list") {
+        experimental::SingleLinkedList<int> test;
+        REQUIRE(test.isEmpty());
+        THEN("The copy constructor should create a new empty list") {
+            experimental::SingleLinkedList<int> copy(test);
+            REQUIRE(test.isEmpty());
+            REQUIRE(copy.isEmpty());
+        }
+        THEN("Another form of the copy constructor should also create a new empty list") {
+            experimental::SingleLinkedList<int> copy2 = test;
+            REQUIRE(test.isEmpty());
+            REQUIRE(copy2.isEmpty());
+        }
+    }
+    GIVEN("A list of a single item") {
+        experimental::SingleLinkedList<int> test({3});
+        REQUIRE_FALSE(test.isEmpty());
+        THEN("The copy constructor should create a copy") {
+            experimental::SingleLinkedList<int> copy(test);
+            REQUIRE_FALSE(copy.isEmpty());
+            copy.reset();
+            REQUIRE(copy.next() == 3);
+            REQUIRE_FALSE(copy.hasNext());
+        }
+    }
+    GIVEN("A list with multiple items") {
+        experimental::SingleLinkedList<int> test({3,4,5,6,7,8,9,10});
+        REQUIRE_FALSE(test.isEmpty());
+        THEN("The copy constructor should create an identical copy") {
+            experimental::SingleLinkedList<int> copy(test);
+            copy.reset();
+            test.reset();
+            for (auto item: copy) {
+                auto right = test.next();
+                REQUIRE(item == right);
+            }
+            REQUIRE_FALSE(test.hasNext());
+            REQUIRE_FALSE(copy.hasNext());
+        }
+    }
+}
+
+TEST_CASE("Move constructor","[single_linked_list]") {
+    GIVEN("Any list") {
+        experimental::SingleLinkedList<int> test({3,4,5});
+        REQUIRE_FALSE(test.isEmpty());
+        experimental::SingleLinkedList<int> moved(std::move(test));
+        REQUIRE(test.isEmpty());
+        moved.reset();
+        for (auto item: {5,4,3}) {
+            REQUIRE(item == moved.next());
+        }
+        REQUIRE_FALSE(test.hasNext());
+    }
+}
