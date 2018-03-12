@@ -6,7 +6,8 @@ workspace "experimental"
     buildoptions "-std=c++11 -stdlib=libc++"
   else
     if not os.is("windows") then
-       buildoptions "-std=c++0x"
+       cppdialect "C++14"
+       --- buildoptions "-std=c++0x"
        links { "pthread" }
     end
   end
@@ -15,7 +16,7 @@ workspace "experimental"
 
 	filter "configurations:Debug"
     defines { "DEBUG" }
-    flags { "Symbols" }
+    symbols "On"
     linkoptions "-g"
   filter "configurations:Release"
     defines { "NDEBUG" }
