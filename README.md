@@ -22,16 +22,20 @@ Run "premake5 gmake" to get a set of Makefiles. "premake5 xcode4" for XCode or
 
 I have only tested on OS X with gmake and XCode.
 
-## documentation
+## Documentation
 
 You need Doxygen and Moxygen
 
 1. http://www.stack.nl/~dimitri/doxygen/index.html
 2. https://github.com/sourcey/moxygen
 
-Run `./makedcs.sh`. This will generate the `Documentation.md` and `html/index.html` containing the documentation.
+Run `./makedocs.sh`. This will generate the `Documentation.md` and `html/index.html` containing the documentation.
 
 The markup version is checked into the repository as [Documentation.md](Documentation.md).
+
+## Tests
+
+Run `./bin/64bit/Debug/experimental-tests` for the 64-bit Debug variant of the tests.
 
 ## Contents
 
