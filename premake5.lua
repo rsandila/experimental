@@ -6,7 +6,7 @@ workspace "experimental"
     buildoptions "-std=c++11 -stdlib=libc++"
   else
     if not os.is("windows") then
-       cppdialect "C++14"
+       buildoptions "-std=c++1y"
        --- buildoptions "-std=c++0x"
        links { "pthread" }
     end
