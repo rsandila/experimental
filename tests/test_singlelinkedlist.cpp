@@ -325,14 +325,14 @@ TEST_CASE("iterator","[single_linked_list]") {
         experimental::SingleLinkedList<int> test(param);
         REQUIRE_FALSE(test.isEmpty());
         THEN("A loop wil iterate over all items") {
-            int count = 0;
+            unsigned int count = 0;
             for (auto item: test) {
                 count += 1;
             }
             REQUIRE(count == param.size());
         }
         THEN("A for loop will iterate over all items") {
-            int count = 0;
+            unsigned int count = 0;
             for (auto item = test.begin(); item != test.end(); item++) {
                 count += 1;
             }

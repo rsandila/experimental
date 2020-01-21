@@ -13,6 +13,8 @@
 --------------------------------|---------------------------------------------
 `class `[`experimental::SingleLinkedList`](#classexperimental_1_1_single_linked_list) | A single linked list.
 `class `[`experimental::SingleLinkedListIterator`](#classexperimental_1_1_single_linked_list_iterator) | Iterator helper for [SingleLinkedList](#classexperimental_1_1_single_linked_list).
+`class `[`experimental::SortedList`](#classexperimental_1_1_sorted_list) | A simple sorted list that tries to be efficient.
+`class `[`experimental::SortedListIterator`](#classexperimental_1_1_sorted_list_iterator) | Iterator helper for [SortedList](#classexperimental_1_1_sorted_list).
 
 # class `experimental::SingleLinkedList` 
 
@@ -238,6 +240,200 @@ Pointer operator used by loops.
 
 #### Returns
 The current value
+
+# class `experimental::SortedList` 
+
+A simple sorted list that tries to be efficient.
+
+This list will keep all items in sorted order. It uses a std::vector as backing store so large lists will be less efficient. Items in the list is considered constant and modifications of the objects will not re-sort the list.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline void `[`add`](#classexperimental_1_1_sorted_list_1aa4629056413ad3751c96577355cfd5d1)`(const T value) noexcept` | Adds an item to the list. It will add it in the correct position to keep the list sorted.
+`public inline void `[`remove`](#classexperimental_1_1_sorted_list_1a57deb2bd6b92756c7926d1f7ab5d46fb)`(const `[`SortedListIterator`](#classexperimental_1_1_sorted_list_iterator)`< T > & position)` | Removes an item from the list.
+`public inline bool `[`empty`](#classexperimental_1_1_sorted_list_1ad970c6270412cb490e7eb3799050319f)`() const noexcept` | Is the list empty?
+`public inline unsigned `[`size`](#classexperimental_1_1_sorted_list_1a8b013c9d99a2e2c201bef5efe350a868)`() const noexcept` | Returns the number of items in the list.
+`public inline const T & `[`at`](#classexperimental_1_1_sorted_list_1a52e6809c119269d90aee5c8c95ed7c76)`(unsigned offset) const` | Returns the value at the specified offset.
+`public inline const T & `[`operator[]`](#classexperimental_1_1_sorted_list_1a0fc1eff684f42204f86f51b0948a901e)`(unsigned offset) const` | []Operator
+`public inline const `[`SortedListIterator`](#classexperimental_1_1_sorted_list_iterator)`< T > & `[`find`](#classexperimental_1_1_sorted_list_1a0c9f029aa30fb7a916293356425d9411)`(const T value) const noexcept` | Does a binary search on the list and returns an iterator to its location if found or [end()](#classexperimental_1_1_sorted_list_1aa0682ce91c93d195fa705da91713319d) if not.
+`public inline `[`SortedListIterator`](#classexperimental_1_1_sorted_list_iterator)`< T > `[`begin`](#classexperimental_1_1_sorted_list_1aad5361948aae51451e73ae48c3d36c28)`() const noexcept` | Returns an iterator that indicates the beginning of the list.
+`public inline const `[`SortedListIterator`](#classexperimental_1_1_sorted_list_iterator)`< T > `[`end`](#classexperimental_1_1_sorted_list_1aa0682ce91c93d195fa705da91713319d)`() const noexcept` | Returns a constant iterator that indicates the end of the list.
+`protected std::vector< T > `[`content`](#classexperimental_1_1_sorted_list_1aafe0f9a30a784debf72cbde201264b2d) | 
+
+## Members
+
+#### `public inline void `[`add`](#classexperimental_1_1_sorted_list_1aa4629056413ad3751c96577355cfd5d1)`(const T value) noexcept` 
+
+Adds an item to the list. It will add it in the correct position to keep the list sorted.
+
+#### Parameters
+* `value` The value to add. Type must support == and >
+
+#### `public inline void `[`remove`](#classexperimental_1_1_sorted_list_1a57deb2bd6b92756c7926d1f7ab5d46fb)`(const `[`SortedListIterator`](#classexperimental_1_1_sorted_list_iterator)`< T > & position)` 
+
+Removes an item from the list.
+
+#### Parameters
+* `position` Iterator to the item to be removed
+
+#### `public inline bool `[`empty`](#classexperimental_1_1_sorted_list_1ad970c6270412cb490e7eb3799050319f)`() const noexcept` 
+
+Is the list empty?
+
+#### Returns
+Return true if the list is empty
+
+#### `public inline unsigned `[`size`](#classexperimental_1_1_sorted_list_1a8b013c9d99a2e2c201bef5efe350a868)`() const noexcept` 
+
+Returns the number of items in the list.
+
+#### Returns
+The size of the list
+
+#### `public inline const T & `[`at`](#classexperimental_1_1_sorted_list_1a52e6809c119269d90aee5c8c95ed7c76)`(unsigned offset) const` 
+
+Returns the value at the specified offset.
+
+#### Parameters
+* `offset` Offset into list 
+
+#### Returns
+const reference to the value referenced
+
+#### `public inline const T & `[`operator[]`](#classexperimental_1_1_sorted_list_1a0fc1eff684f42204f86f51b0948a901e)`(unsigned offset) const` 
+
+[]Operator
+
+#### Parameters
+* `offset` Offset into list 
+
+#### Returns
+const reference to the value referenced
+
+#### `public inline const `[`SortedListIterator`](#classexperimental_1_1_sorted_list_iterator)`< T > & `[`find`](#classexperimental_1_1_sorted_list_1a0c9f029aa30fb7a916293356425d9411)`(const T value) const noexcept` 
+
+Does a binary search on the list and returns an iterator to its location if found or [end()](#classexperimental_1_1_sorted_list_1aa0682ce91c93d195fa705da91713319d) if not.
+
+#### Parameters
+* `value` The value to find 
+
+#### Returns
+An iterator to the position of the value or the [end()](#classexperimental_1_1_sorted_list_1aa0682ce91c93d195fa705da91713319d) iterator
+
+#### `public inline `[`SortedListIterator`](#classexperimental_1_1_sorted_list_iterator)`< T > `[`begin`](#classexperimental_1_1_sorted_list_1aad5361948aae51451e73ae48c3d36c28)`() const noexcept` 
+
+Returns an iterator that indicates the beginning of the list.
+
+#### Returns
+Iterator
+
+#### `public inline const `[`SortedListIterator`](#classexperimental_1_1_sorted_list_iterator)`< T > `[`end`](#classexperimental_1_1_sorted_list_1aa0682ce91c93d195fa705da91713319d)`() const noexcept` 
+
+Returns a constant iterator that indicates the end of the list.
+
+#### Returns
+Iterator
+
+#### `protected std::vector< T > `[`content`](#classexperimental_1_1_sorted_list_1aafe0f9a30a784debf72cbde201264b2d) 
+
+# class `experimental::SortedListIterator` 
+
+Iterator helper for [SortedList](#classexperimental_1_1_sorted_list).
+
+If `list` is of type [SortedList](#classexperimental_1_1_sorted_list) then it is used in one of two ways:
+
+* `for (auto i: list) { ... }`
+
+* `for (auto i = list.begin(); i != list.end(); i++) { ... }`
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline bool `[`operator!=`](#classexperimental_1_1_sorted_list_iterator_1a5153e09066955ea473e7788a26440870)`(const `[`SortedListIterator`](#classexperimental_1_1_sorted_list_iterator)`< T > & other) const noexcept` | Non equal operator.
+`public inline bool `[`operator==`](#classexperimental_1_1_sorted_list_iterator_1aac54cdb1c6992ff9cb5c991de4a4fda6)`(const `[`SortedListIterator`](#classexperimental_1_1_sorted_list_iterator)`< T > & other) const noexcept` | Equal operator.
+`public inline T & `[`operator++`](#classexperimental_1_1_sorted_list_iterator_1a25e31ecc074bf92de0a88b2ea485c45f)`()` | Advances the iterator.
+`public inline T & `[`operator++`](#classexperimental_1_1_sorted_list_iterator_1a55fd3b39d933c9b7690f99f3a023668b)`(int)` | Advances the iterator.
+`public inline `[`SortedListIterator`](#classexperimental_1_1_sorted_list_iterator)`< T > & `[`operator+=`](#classexperimental_1_1_sorted_list_iterator_1aeb79ab51397d626d3fcecb5da0b7390e)`(int value)` | += Operator
+`public inline `[`SortedListIterator`](#classexperimental_1_1_sorted_list_iterator)`< T > & `[`operator-=`](#classexperimental_1_1_sorted_list_iterator_1a576f14c339059a3e54125ff39c4d0f91)`(int value)` | -= Operator
+`public inline const T & `[`operator*`](#classexperimental_1_1_sorted_list_iterator_1acfe632ec570fd43701aa1aec4803292c)`() const` | Pointer operator used by loops.
+`protected inline  `[`SortedListIterator`](#classexperimental_1_1_sorted_list_iterator_1a412e44348fe690d28dc75fbeb8e7402f)`(const `[`SortedList`](#classexperimental_1_1_sorted_list)`< T > & that,bool end,unsigned startOffset)` | Constructor.
+
+## Members
+
+#### `public inline bool `[`operator!=`](#classexperimental_1_1_sorted_list_iterator_1a5153e09066955ea473e7788a26440870)`(const `[`SortedListIterator`](#classexperimental_1_1_sorted_list_iterator)`< T > & other) const noexcept` 
+
+Non equal operator.
+
+#### Parameters
+* `other` The iterator to compare to 
+
+#### Returns
+True if the two iterators are not at the same position
+
+#### `public inline bool `[`operator==`](#classexperimental_1_1_sorted_list_iterator_1aac54cdb1c6992ff9cb5c991de4a4fda6)`(const `[`SortedListIterator`](#classexperimental_1_1_sorted_list_iterator)`< T > & other) const noexcept` 
+
+Equal operator.
+
+#### Parameters
+* `other` The iterator to compare to 
+
+#### Returns
+True if the two iterators are at the same position
+
+#### `public inline T & `[`operator++`](#classexperimental_1_1_sorted_list_iterator_1a25e31ecc074bf92de0a88b2ea485c45f)`()` 
+
+Advances the iterator.
+
+#### Returns
+The current value
+
+#### `public inline T & `[`operator++`](#classexperimental_1_1_sorted_list_iterator_1a55fd3b39d933c9b7690f99f3a023668b)`(int)` 
+
+Advances the iterator.
+
+#### Returns
+The current value
+
+#### `public inline `[`SortedListIterator`](#classexperimental_1_1_sorted_list_iterator)`< T > & `[`operator+=`](#classexperimental_1_1_sorted_list_iterator_1aeb79ab51397d626d3fcecb5da0b7390e)`(int value)` 
+
++= Operator
+
+#### Parameters
+* `offet` The offset to apply 
+
+#### Returns
+The updated iterator
+
+#### `public inline `[`SortedListIterator`](#classexperimental_1_1_sorted_list_iterator)`< T > & `[`operator-=`](#classexperimental_1_1_sorted_list_iterator_1a576f14c339059a3e54125ff39c4d0f91)`(int value)` 
+
+-= Operator
+
+#### Parameters
+* `offet` The offset to apply 
+
+#### Returns
+The updated iterator
+
+#### `public inline const T & `[`operator*`](#classexperimental_1_1_sorted_list_iterator_1acfe632ec570fd43701aa1aec4803292c)`() const` 
+
+Pointer operator used by loops.
+
+#### Returns
+The current value
+
+#### `protected inline  `[`SortedListIterator`](#classexperimental_1_1_sorted_list_iterator_1a412e44348fe690d28dc75fbeb8e7402f)`(const `[`SortedList`](#classexperimental_1_1_sorted_list)`< T > & that,bool end,unsigned startOffset)` 
+
+Constructor.
+
+#### Parameters
+* `value` [SortedList](#classexperimental_1_1_sorted_list) used by iterator 
+
+* `end` Is this the end marker? 
+
+* `startOffset` starting offset of iterator
 
 # class `experimental::SingleLinkedList::Element` 
 

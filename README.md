@@ -18,10 +18,13 @@ If it works, good. If it doesn't, file a ticket. I may fix it.
 You need premake5: https://premake.github.io/download.html is a good starting point.
 
 Run "premake5 gmake" to get a set of Makefiles. "premake5 xcode4" for XCode or
-"premake5 vs2015" for Visual Studio.
+"premake5 vs2019" for Visual Studio.
 
-I have only tested on OS X with gmake and XCode.
-
+I have only tested on:
+ 1. OS X gmake and XCode.
+ 2. Windows running Linux for Windows and gmake (NPM should be used to install Moxygen using from Windows using 'npm install moxygen -g' and then used from Linux for Windows)
+ 3. Windows running Visual Studio 2019
+ 
 ## Documentation
 
 You need Doxygen and Moxygen
@@ -49,3 +52,12 @@ relatively bug free.
 This list is not fast, it is not thread-safe, it is not fancy. But it seems to
 work. Or put another way, I am at this specific time unable to think of a
 situation that will break it that does not involve multiple threads.
+
+### sortedlist.hpp
+
+This contains a simple sorted list. It uses std::vector as a base so will not 
+perform optimally on big lists. It uses binary search for inserts and for finding
+items in the list so that should be mostly efficient. But this was a good experiment
+at writing a sorted list and there should be okay code coverage from the unit tests and few bugs.
+
+It is not thread-safe, it is not fancy and will likely not scale to large lists.

@@ -8,4 +8,8 @@ experimental/
 html/
 xml/
 Doxyfile.bak
-
+.vscode/
+experimental.sln
+experimental-tests.vcxproj
+*.filters
+*.user

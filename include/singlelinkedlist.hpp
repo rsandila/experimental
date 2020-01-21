@@ -1,5 +1,5 @@
 //
-//  singlelinkedlist.cpp
+//  singlelinkedlist.hpp
 //  experimental
 //
 //  Created by Robert Sandilands on 3/6/18.
