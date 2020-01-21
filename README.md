@@ -15,7 +15,7 @@ If it works, good. If it doesn't, file a ticket. I may fix it.
 
 ## Building it
 
-[![Appveyor Linux build status](https://ci.appveyor.com/api/projects/status/pgnil2xid8x9u4ng/branch/master?svg=true)](https://ci.appveyor.com/project/rsandila/experimental/branch/master)
+Appveyor Linux: [![ build status](https://ci.appveyor.com/api/projects/status/pgnil2xid8x9u4ng/branch/master?svg=true)](https://ci.appveyor.com/project/rsandila/experimental/branch/master)
 
 
 You need premake5: https://premake.github.io/download.html is a good starting point.
