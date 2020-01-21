@@ -3,7 +3,7 @@ os: Ubuntu
 configuration: Debug
 platform: Any CPU
 install:
-- curl https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-linux.tar.gz -o premake.tar.gz
+- curl -L https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-linux.tar.gz -o premake.tar.gz
 - tar zxf premake.tar.gz
 - ./premake5 gmake2
 build_script:
