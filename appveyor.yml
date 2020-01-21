@@ -1,27 +1,19 @@
 version: 0.1.{build}
-os: Visual Studio 2019
+os: Ubuntu
 configuration: Debug
 platform: Any CPU
 install:
-- cmd: bin\tools\windows\premake5 vs2019
+- curl https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-linux.tar.gz -o premake.tar.gz
+- tar zxf premake.tar.gz
+- ./premake5 gmake2
 build_script:
-- cmd: >-
-    msbuild experimental.sln /m /p:Configuration=Debug /p:Platform=64bit /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+- make
 test_script:
-- ps: >-
-    # run tests
-
-    .\bin\64bit\Debug\experimental-tests.exe -r junit -o experimental-tests.64.debug.xml
-
-    $err = $LASTEXITCODE
-
-    # upload results to AppVeyor
-
-    $wc = New-Object 'System.Net.WebClient'
-
-    $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\experimental-tests.64.debug.xml))
-
-    if ($err -ne 0) { exit $err }
+  - sh: |
+      ./bin/64bit/Debug/experimental-tests -r junit -o experimental-tests.64.debug.xml
+      err=$?
+      curl -F 'file=@experimental-tests.64.debug.xml' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
+      exit $err
 artifacts:
   - path: experimental-tests.64.debug.xml
     name: Log File

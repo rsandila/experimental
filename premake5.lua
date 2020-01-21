@@ -2,17 +2,18 @@ workspace "experimental"
   platforms { "64bit", "32bit" }
   configurations { "Debug", "Release" }
   warnings "Extra"
-  if os.is("macosx") then
+  if os.istarget("macosx") then
     buildoptions "-std=c++11 -stdlib=libc++"
   else
-    if not os.is("windows") then
+    if not os.istarget("windows") then
        buildoptions "-std=c++1y"
        --- buildoptions "-std=c++0x"
        links { "pthread" }
     end
   end
 
-  flags { "StaticRuntime", "MultiProcessorCompile" }
+  flags { "MultiProcessorCompile" }
+  staticruntime "on"
 
 	filter "configurations:Debug"
     defines { "DEBUG" }
