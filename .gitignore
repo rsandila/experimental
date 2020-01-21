@@ -13,3 +13,4 @@ experimental.sln
 experimental-tests.vcxproj
 *.filters
 *.user
+experimental-tests.64.debug.xml
