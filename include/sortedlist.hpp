@@ -16,7 +16,7 @@ namespace experimental {
     /*! \brief A simple sorted list that tries to be efficient
 
         This list will keep all items in sorted order. It uses a std::vector as backing store so large lists will be less efficient. 
-        Items in the list is considered constant and modifications of the objects will not re-sort the list.
+        Items in the list are considered constant and modifications of the objects will not re-sort the list.
     */
     template <class T> class SortedList {
         public:
