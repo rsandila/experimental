@@ -64,3 +64,11 @@ items in the list so that should be mostly efficient. But this was a good experi
 at writing a sorted list and there should be okay code coverage from the unit tests and few bugs.
 
 It is not thread-safe, it is not fancy and will likely not scale to large lists.
+
+### skiplist.hpp
+
+A skip list is a mix between a tree and a linked list. It keeps the items in a sorted order but by having
+links that can skip other links allows for finding items faster than you would in a standard linked list.
+The algorithm looks expensive for inserting as multiple links can be updated on insertion but balancing that
+against a tree rebalance or a memory move as you would get in a std::vector it may just end up not being as
+expensive as you think. It will probably be most efficient for larger data sets.
