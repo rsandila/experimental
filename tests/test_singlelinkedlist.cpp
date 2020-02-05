@@ -43,6 +43,7 @@ TEST_CASE("Empty list tests", "[single_linked_list]") {
         WHEN("We iterate an empty list things work") {
             int count = 0;
             for (auto iter: test) {
+                REQUIRE(iter != 0);
                 count += 1;
             }
             THEN("We should not have iterated anything") {
@@ -293,6 +294,7 @@ TEST_CASE("iterator","[single_linked_list]") {
         REQUIRE(test.isEmpty());
         THEN("A loop will iterate over nothing") {
             for (auto item: test) {
+                REQUIRE(item != 0);
                 REQUIRE_FALSE(true);
             }
         }
@@ -308,6 +310,7 @@ TEST_CASE("iterator","[single_linked_list]") {
         THEN("A loop will iterate over 1 item") {
             int count = 0;
             for (auto item: test) {
+                REQUIRE(item != 0);
                 count += 1;
             }
             REQUIRE(count == 1);
@@ -327,6 +330,7 @@ TEST_CASE("iterator","[single_linked_list]") {
         THEN("A loop wil iterate over all items") {
             unsigned int count = 0;
             for (auto item: test) {
+                REQUIRE(item != 0);
                 count += 1;
             }
             REQUIRE(count == param.size());
