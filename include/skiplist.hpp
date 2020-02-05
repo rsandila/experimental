@@ -13,6 +13,15 @@
 #include <random>
 
 namespace experimental {    
+    template <class T> class SkipListIterator;
+    /*! \brief Skip List
+
+        A skip list is a mix between a tree and a linked list. It keeps the items in a sorted order but by having links that can skip other links allows for finding items faster
+        than you would in a standard linked list. The algorithm looks expensive for inserting as multiple links can be updated on insertion but balancing that against a tree rebalance
+        or a memory move as you would get in a std::vector it may just end up not being as expensive as you think. It will probably be most efficient for larger data sets.
+
+        Items in the list are considered constant and modifications of the objects will not re-sort the list.
+    */
     template <class T> class SkipList {
     private:
         template <class TPriv> class Element {
@@ -27,18 +36,15 @@ namespace experimental {
                 }
             }
             virtual ~Element() noexcept {
-                for (auto item : next) {
-                    delete item;
-                }
                 next.clear();
             }
-            Element<TPriv>* getNext(unsigned offset) const noexcept(false) { 
+            Element<TPriv>* getNext(unsigned offset) const noexcept { 
                 if (offset >= size()) {
                     return nullptr;
                 }
                 return next[offset]; 
             }
-            void setNext(Element<TPriv> * newValue, unsigned offset) noexcept(false) { 
+            void setNext(Element<TPriv> * newValue, unsigned offset) noexcept { 
                 if (offset >= size()) {
                     next.resize(offset + 1);
                 }
@@ -59,27 +65,42 @@ namespace experimental {
         std::uniform_int_distribution<int> distribution;
 
     public:
-        template <class T> class SkipListIterator;
-        //friend class SkipListIterator<T>;
-
+        friend class SkipListIterator<T>;
+        /*! \brief Constructor
+            \param _lgNMax A magic number that controls how big the skiplist can get. Experimentation should be used to find an optimal value for your data
+        */
         SkipList(unsigned _lgNMax = 4) : lgNMax(_lgNMax), N(0), lgN(0), distribution(0, RAND_MAX) {
             // order matters
             z = new Element<T>(0);
             head = new Element<T>(_lgNMax, z);
         }
+        /*! \brief Destructor
+        */
         virtual ~SkipList() {
-            // TODO
+            deleteHelper(head);
+            delete z;
+            head = nullptr;
+            z = nullptr;
+            N = 0;
+            lgN = 0;
+            lgNMax = 0;
         }
-        void add(const T value) {
+        /*! \brief Adds an item to the list and keep the list in sorted order
+            \param value The value to add
+        */
+        void add(const T value) noexcept {
             addHelper(head, new Element<T>(randX(), z, value), lgN);
             N += 1;
         }
-        void remove(const SkipListIterator<T>& pos) {
-            // TODO
-        }
+        /*! \brief Finds a value in the list. T must implement < and ==
+            \param value The value to find
+            \returns end() if not found, otherwise an iterator to the value
+        */
         SkipListIterator<T> find(const T value) {
-            // TODO
+            return std::move(SkipListIterator<T>(*this, findHelper(head, value)));
         }
+        /*! \brief Returns true if the list is empty 
+            \returns True if the list is empty */
         bool isEmpty() noexcept {
             return N == 0;
         }
@@ -98,7 +119,13 @@ namespace experimental {
             return std::move(SkipListIterator<T>(*this, true));
         }
     protected:
-        unsigned randX() {
+        /*! \brief Returns a random size for a node
+
+            Updates lgN
+
+            \returns A size that will be < lgNMax and >= 1
+        */
+        unsigned randX() noexcept {
             
             unsigned i, j;
             unsigned t = distribution(generator);  
@@ -112,19 +139,19 @@ namespace experimental {
                 lgN = i;
             }
             return i;
-            // lgN = 3;
-            // return 3;
         }
-        void addHelper(Element<T>* t, Element<T>* x, unsigned k) {
-            /*if (k >= t->size()) {
-                k = t->size() - 1;
-            }*/
+        /*! \brief Recursively adds an item to a node 
+            \param t The current node to process
+            \param x The node to add 
+            \param k The current working offset 
+            */
+        void addHelper(Element<T>* t, Element<T>* x, unsigned k) noexcept {
             auto next = t->getNext(k);
             if (next == nullptr) {
                 next = z;
             }
             if (next == z || x->getValue() < next->getValue()) {
-                if (k < x->size()) {
+                if (k < x->size() && k < t->size()) {
                     x->setNext(t->getNext(k), k);
                     t->setNext(x, k);
                 }
@@ -140,22 +167,66 @@ namespace experimental {
             }
             addHelper(next, x, k);
         }
+        /*! \brief Recursively finds value in the list 
+            \returns z if not found, otherwise the node 
+            \param t The current node to search
+            \param value The value to match 
+            */
+        Element<T>* findHelper(Element<T>* t, const T& value) const noexcept {
+            if (t == nullptr || t == z) {
+                return z;
+            }
+            if (value == t->getValue()) {
+                return t;
+            }
+            for (int i = t->size() - 1; i >= 0; i--) {
+                auto item = t->getNext(i);
+                if (item != nullptr && item != z) {
+                    if (value == item->getValue()) {
+                        return item;
+                    }
+                    auto nextItem = item->getNext(i);
+                    if (nextItem == nullptr || nextItem == z) {
+                        continue;
+                    }
+                    if (nextItem->getValue() == value) {
+                        return nextItem;
+                    }
+                    if (nextItem->getValue() < value) {
+                        return findHelper(nextItem, value);
+                    }
+                }
+            }
+            return z;
+        }
+        /*! \brief Used by the destructor to cleanup recursively
+        */
+        void deleteHelper(Element<T>* item) noexcept {
+            if (item == nullptr || item == z) {
+                return;
+            }
+            auto next = item->getNext(0);
+            delete item;
+            deleteHelper(next);
+        }
     };
     template <class T> class SkipListIterator {
     private:
-        SkipList<T>& list;
-        SkipList::Element<T>* cursor;
-        unsigned offsetInCursor;
+        const SkipList<T>& list;
+        SkipList<T>::Element<T>* cursor;
         bool endValue;
     public:
-        /*! \brief Constructor
+        friend class SkipList<T>;
+        /*! \brief == Comparison operator
 
-            \param value SkipList used by iterator
-            \param end Is this the end marker?
+            \param other Other SkipList used to compare
+
+            \returns Returns true if both lists are at the same location
         */
-        SkipListIterator(SkipList<T>& value, bool end) noexcept : list(value), endValue(end), offsetInCursor(0), cursor(list.head) {
+        bool operator == (const SkipListIterator& other) const noexcept {
+            return (cursor == other.cursor);
         }
-        /*! \brief Comparison operator
+        /*! \brief != Comparison operator
 
             \param other Other SkipList used to compare
 
@@ -182,18 +253,21 @@ namespace experimental {
         /*! \brief Advances the iterator
           \returns The current value
         */
-        const T & operator ++() noexcept {
-           //  return list.next();
-           // TODO
+        const T & operator ++() noexcept(false) {
+            if (cursor == list.z) {
+                throw new std::out_of_range("Enumerating past the end of the list");
+            }
+            // if we follow next[0] we will enumerate all, so we only need to keep track of the current node
+            cursor = cursor->getNext(0);
+            return cursor->getValue();
         }
         /*! \brief Advances the iterator
           \returns The current value
         */
-        const T & operator ++(int) noexcept {
-            // T retval = list.current();
-            // ++(*this);
-            // return retval;
-            // TODO
+        const T & operator ++(int) noexcept(false) {
+            T retval = cursor->getValue();
+            ++(*this);
+            return retval;
         }
         /*! \brief Pointer operator used by loops
 
@@ -203,16 +277,31 @@ namespace experimental {
             return cursor->getValue();
         }
     protected:
-        bool hasNext() {
-            if (cursor == list.z) {
-                return false;
+        /*! \brief Constructor
+
+            \param value SkipList used by iterator
+            \param item The current position in the list
+        */
+        SkipListIterator(const SkipList<T>& value, SkipList<T>::Element<T>* item) noexcept : list(value), cursor(item) {
+            if (cursor == nullptr) {
+                cursor = list.z;
             }
-            for (unsigned i = 0; i < cursor->size(); i++) {
-                if (cursor->getNext(i) != list.z) {
-                    return true;
-                }
+            endValue = (cursor == list.z);
+        }
+        /*! \brief Constructor
+
+            \param value SkipList used by iterator
+            \param end Is this the end marker?
+        */
+        SkipListIterator(const SkipList<T>& value, bool end) noexcept : list(value), endValue(end), cursor(list.head->getNext(0)) {
+            if (cursor == nullptr || endValue) {
+                cursor = list.z;
             }
-            return false;
+        }
+        /*! \brief Returns whether we are at the end of the list or not
+        */
+        bool hasNext() const noexcept {
+            return cursor != list.z;
         }
     };
 };

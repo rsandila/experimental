@@ -4,6 +4,7 @@
 --------------------------------|---------------------------------------------
 `namespace `[`experimental`](#namespaceexperimental) | 
 `class `[`experimental::SingleLinkedList::Element`](#classexperimental_1_1_single_linked_list_1_1_element) | 
+`class `[`experimental::SkipList::Element`](#classexperimental_1_1_skip_list_1_1_element) | 
 
 # namespace `experimental` 
 
@@ -13,6 +14,8 @@
 --------------------------------|---------------------------------------------
 `class `[`experimental::SingleLinkedList`](#classexperimental_1_1_single_linked_list) | A single linked list.
 `class `[`experimental::SingleLinkedListIterator`](#classexperimental_1_1_single_linked_list_iterator) | Iterator helper for [SingleLinkedList](#classexperimental_1_1_single_linked_list).
+`class `[`experimental::SkipList`](#classexperimental_1_1_skip_list) | Skip List.
+`class `[`experimental::SkipListIterator`](#classexperimental_1_1_skip_list_iterator) | 
 `class `[`experimental::SortedList`](#classexperimental_1_1_sorted_list) | A simple sorted list that tries to be efficient.
 `class `[`experimental::SortedListIterator`](#classexperimental_1_1_sorted_list_iterator) | Iterator helper for [SortedList](#classexperimental_1_1_sorted_list).
 
@@ -241,11 +244,202 @@ Pointer operator used by loops.
 #### Returns
 The current value
 
+# class `experimental::SkipList` 
+
+Skip List.
+
+A skip list is a mix between a tree and a linked list. It keeps the items in a sorted order but by having links that can skip other links allows for finding items faster than you would in a standard linked list. The algorithm looks expensive for inserting as multiple links can be updated on insertion but balancing that against a tree rebalance or a memory move as you would get in a std::vector it may just end up not being as expensive as you think. It will probably be most efficient for larger data sets.
+
+Items in the list are considered constant and modifications of the objects will not re-sort the list.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline  `[`SkipList`](#classexperimental_1_1_skip_list_1aa197aa722ba663df1fd44cf69ff1cd35)`(unsigned _lgNMax)` | Constructor.
+`public inline virtual  `[`~SkipList`](#classexperimental_1_1_skip_list_1a5dbc3cc61798407e2afe5045ebc49617)`()` | Destructor.
+`public inline void `[`add`](#classexperimental_1_1_skip_list_1a688dbdcccccf8bb5d975df76a8d0f2e0)`(const T value) noexcept` | Adds an item to the list and keep the list in sorted order.
+`public inline `[`SkipListIterator`](#classexperimental_1_1_skip_list_iterator)`< T > `[`find`](#classexperimental_1_1_skip_list_1a31cb8f3f943136d21cb4b6f59c758351)`(const T value)` | Finds a value in the list. T must implement < and ==.
+`public inline bool `[`isEmpty`](#classexperimental_1_1_skip_list_1a7ce0e2481a9b9039f056479125721e3f)`() noexcept` | Returns true if the list is empty.
+`public inline `[`SkipListIterator`](#classexperimental_1_1_skip_list_iterator)`< T > `[`begin`](#classexperimental_1_1_skip_list_1a4e78931a58173885ca93ebda3e3c9316)`() noexcept` | Returns iterator for use in loops.
+`public inline const `[`SkipListIterator`](#classexperimental_1_1_skip_list_iterator)`< T > `[`end`](#classexperimental_1_1_skip_list_1af32847efc2539a34e1864b8afb80ac09)`() noexcept` | Returns end iterator for use in loops.
+`protected inline unsigned `[`randX`](#classexperimental_1_1_skip_list_1a8850b5a5cf76e050282e432f96f22fca)`() noexcept` | Returns a random size for a node.
+`protected inline void `[`addHelper`](#classexperimental_1_1_skip_list_1a014e9a7870a1e1ab1417245ca869d70b)`(Element< T > * t,Element< T > * x,unsigned k) noexcept` | Recursively adds an item to a node.
+`protected inline Element< T > * `[`findHelper`](#classexperimental_1_1_skip_list_1a5ffa9813457742b28789396cffd74d06)`(Element< T > * t,const T & value) const noexcept` | Recursively finds value in the list.
+`protected inline void `[`deleteHelper`](#classexperimental_1_1_skip_list_1af99ba5322c13f8d7bdad3dc9c8fbb1b8)`(Element< T > * item) noexcept` | Used by the destructor to cleanup recursively.
+
+## Members
+
+#### `public inline  `[`SkipList`](#classexperimental_1_1_skip_list_1aa197aa722ba663df1fd44cf69ff1cd35)`(unsigned _lgNMax)` 
+
+Constructor.
+
+#### Parameters
+* `_lgNMax` A magic number that controls how big the skiplist can get. Experimentation should be used to find an optimal value for your data
+
+#### `public inline virtual  `[`~SkipList`](#classexperimental_1_1_skip_list_1a5dbc3cc61798407e2afe5045ebc49617)`()` 
+
+Destructor.
+
+#### `public inline void `[`add`](#classexperimental_1_1_skip_list_1a688dbdcccccf8bb5d975df76a8d0f2e0)`(const T value) noexcept` 
+
+Adds an item to the list and keep the list in sorted order.
+
+#### Parameters
+* `value` The value to add
+
+#### `public inline `[`SkipListIterator`](#classexperimental_1_1_skip_list_iterator)`< T > `[`find`](#classexperimental_1_1_skip_list_1a31cb8f3f943136d21cb4b6f59c758351)`(const T value)` 
+
+Finds a value in the list. T must implement < and ==.
+
+#### Parameters
+* `value` The value to find 
+
+#### Returns
+[end()](#classexperimental_1_1_skip_list_1af32847efc2539a34e1864b8afb80ac09) if not found, otherwise an iterator to the value
+
+#### `public inline bool `[`isEmpty`](#classexperimental_1_1_skip_list_1a7ce0e2481a9b9039f056479125721e3f)`() noexcept` 
+
+Returns true if the list is empty.
+
+#### Returns
+True if the list is empty
+
+#### `public inline `[`SkipListIterator`](#classexperimental_1_1_skip_list_iterator)`< T > `[`begin`](#classexperimental_1_1_skip_list_1a4e78931a58173885ca93ebda3e3c9316)`() noexcept` 
+
+Returns iterator for use in loops.
+
+#### Returns
+[SkipListIterator](#classexperimental_1_1_skip_list_iterator)
+
+#### `public inline const `[`SkipListIterator`](#classexperimental_1_1_skip_list_iterator)`< T > `[`end`](#classexperimental_1_1_skip_list_1af32847efc2539a34e1864b8afb80ac09)`() noexcept` 
+
+Returns end iterator for use in loops.
+
+#### Returns
+[SkipListIterator](#classexperimental_1_1_skip_list_iterator)
+
+#### `protected inline unsigned `[`randX`](#classexperimental_1_1_skip_list_1a8850b5a5cf76e050282e432f96f22fca)`() noexcept` 
+
+Returns a random size for a node.
+
+Updates lgN
+
+#### Returns
+A size that will be < lgNMax and >= 1
+
+#### `protected inline void `[`addHelper`](#classexperimental_1_1_skip_list_1a014e9a7870a1e1ab1417245ca869d70b)`(Element< T > * t,Element< T > * x,unsigned k) noexcept` 
+
+Recursively adds an item to a node.
+
+#### Parameters
+* `t` The current node to process 
+
+* `x` The node to add 
+
+* `k` The current working offset
+
+#### `protected inline Element< T > * `[`findHelper`](#classexperimental_1_1_skip_list_1a5ffa9813457742b28789396cffd74d06)`(Element< T > * t,const T & value) const noexcept` 
+
+Recursively finds value in the list.
+
+#### Returns
+z if not found, otherwise the node 
+
+#### Parameters
+* `t` The current node to search 
+
+* `value` The value to match
+
+#### `protected inline void `[`deleteHelper`](#classexperimental_1_1_skip_list_1af99ba5322c13f8d7bdad3dc9c8fbb1b8)`(Element< T > * item) noexcept` 
+
+Used by the destructor to cleanup recursively.
+
+# class `experimental::SkipListIterator` 
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline bool `[`operator==`](#classexperimental_1_1_skip_list_iterator_1a33734050999965858c9d194d755a7b53)`(const `[`SkipListIterator`](#classexperimental_1_1_skip_list_iterator)` & other) const noexcept` | == Comparison operator
+`public inline bool `[`operator!=`](#classexperimental_1_1_skip_list_iterator_1a1607a635c93b210f252e66473f397207)`(const `[`SkipListIterator`](#classexperimental_1_1_skip_list_iterator)` & other) const noexcept` | != Comparison operator
+`public inline const T & `[`operator++`](#classexperimental_1_1_skip_list_iterator_1a99a8a267db7c3a33b6954331e4eaf586)`()` | Advances the iterator.
+`public inline const T & `[`operator++`](#classexperimental_1_1_skip_list_iterator_1af476ca42e1eb56a9e6b654e8ea2fb64e)`(int)` | Advances the iterator.
+`public inline const T & `[`operator*`](#classexperimental_1_1_skip_list_iterator_1aaa61547b96fb0a2972752267f4c0a1eb)`() noexcept` | Pointer operator used by loops.
+`protected inline  `[`SkipListIterator`](#classexperimental_1_1_skip_list_iterator_1a04f9e03fc579d0ab5b942b59d678f58e)`(const `[`SkipList`](#classexperimental_1_1_skip_list)`< T > & value,`[`SkipList`](#classexperimental_1_1_skip_list)`< T >::Element< T > * item) noexcept` | Constructor.
+`protected inline  `[`SkipListIterator`](#classexperimental_1_1_skip_list_iterator_1a68e1df21c799b41bc6f48ffdf119e142)`(const `[`SkipList`](#classexperimental_1_1_skip_list)`< T > & value,bool end) noexcept` | Constructor.
+`protected inline bool `[`hasNext`](#classexperimental_1_1_skip_list_iterator_1a65db39ff5620d81cc63619cc8448c24a)`() const noexcept` | Returns whether we are at the end of the list or not.
+
+## Members
+
+#### `public inline bool `[`operator==`](#classexperimental_1_1_skip_list_iterator_1a33734050999965858c9d194d755a7b53)`(const `[`SkipListIterator`](#classexperimental_1_1_skip_list_iterator)` & other) const noexcept` 
+
+== Comparison operator
+
+#### Parameters
+* `other` Other [SkipList](#classexperimental_1_1_skip_list) used to compare
+
+#### Returns
+Returns true if both lists are at the same location
+
+#### `public inline bool `[`operator!=`](#classexperimental_1_1_skip_list_iterator_1a1607a635c93b210f252e66473f397207)`(const `[`SkipListIterator`](#classexperimental_1_1_skip_list_iterator)` & other) const noexcept` 
+
+!= Comparison operator
+
+#### Parameters
+* `other` Other [SkipList](#classexperimental_1_1_skip_list) used to compare
+
+#### Returns
+Returns false if we are at the end of the list
+
+#### `public inline const T & `[`operator++`](#classexperimental_1_1_skip_list_iterator_1a99a8a267db7c3a33b6954331e4eaf586)`()` 
+
+Advances the iterator.
+
+#### Returns
+The current value
+
+#### `public inline const T & `[`operator++`](#classexperimental_1_1_skip_list_iterator_1af476ca42e1eb56a9e6b654e8ea2fb64e)`(int)` 
+
+Advances the iterator.
+
+#### Returns
+The current value
+
+#### `public inline const T & `[`operator*`](#classexperimental_1_1_skip_list_iterator_1aaa61547b96fb0a2972752267f4c0a1eb)`() noexcept` 
+
+Pointer operator used by loops.
+
+#### Returns
+The current value
+
+#### `protected inline  `[`SkipListIterator`](#classexperimental_1_1_skip_list_iterator_1a04f9e03fc579d0ab5b942b59d678f58e)`(const `[`SkipList`](#classexperimental_1_1_skip_list)`< T > & value,`[`SkipList`](#classexperimental_1_1_skip_list)`< T >::Element< T > * item) noexcept` 
+
+Constructor.
+
+#### Parameters
+* `value` [SkipList](#classexperimental_1_1_skip_list) used by iterator 
+
+* `item` The current position in the list
+
+#### `protected inline  `[`SkipListIterator`](#classexperimental_1_1_skip_list_iterator_1a68e1df21c799b41bc6f48ffdf119e142)`(const `[`SkipList`](#classexperimental_1_1_skip_list)`< T > & value,bool end) noexcept` 
+
+Constructor.
+
+#### Parameters
+* `value` [SkipList](#classexperimental_1_1_skip_list) used by iterator 
+
+* `end` Is this the end marker?
+
+#### `protected inline bool `[`hasNext`](#classexperimental_1_1_skip_list_iterator_1a65db39ff5620d81cc63619cc8448c24a)`() const noexcept` 
+
+Returns whether we are at the end of the list or not.
+
 # class `experimental::SortedList` 
 
 A simple sorted list that tries to be efficient.
 
-This list will keep all items in sorted order. It uses a std::vector as backing store so large lists will be less efficient. Items in the list is considered constant and modifications of the objects will not re-sort the list.
+This list will keep all items in sorted order. It uses a std::vector as backing store so large lists will be less efficient. Items in the list are considered constant and modifications of the objects will not re-sort the list.
 
 ## Summary
 
@@ -455,5 +649,32 @@ Constructor.
 #### `public inline void `[`setNext`](#classexperimental_1_1_single_linked_list_1_1_element_1a9c882fe4148300464a78f987e27cc25a)`(Element< TPriv > * newValue) noexcept` 
 
 #### `public inline TPriv `[`getValue`](#classexperimental_1_1_single_linked_list_1_1_element_1a5fcfd25bac225ee5bcc34219889e75f9)`() const noexcept` 
+
+# class `experimental::SkipList::Element` 
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline  `[`Element`](#classexperimental_1_1_skip_list_1_1_element_1aa0b05b2e0dd6d3615957bd7d5e991282)`(unsigned size,Element * newNext,TPriv newValue) noexcept` | 
+`public inline virtual  `[`~Element`](#classexperimental_1_1_skip_list_1_1_element_1ace18662b0ca6c3e4501dcf9777f11d0c)`() noexcept` | 
+`public inline Element< TPriv > * `[`getNext`](#classexperimental_1_1_skip_list_1_1_element_1aa11528ac07640a5d1e90e43c66fbfaca)`(unsigned offset) const noexcept` | 
+`public inline void `[`setNext`](#classexperimental_1_1_skip_list_1_1_element_1a6cad818e63d2f05b83d742999c4bd944)`(Element< TPriv > * newValue,unsigned offset) noexcept` | 
+`public inline const TPriv & `[`getValue`](#classexperimental_1_1_skip_list_1_1_element_1a304aeacbb9d1844bbe479ae2f4d53e25)`() const noexcept` | 
+`public inline unsigned `[`size`](#classexperimental_1_1_skip_list_1_1_element_1a07fcea6c4aa6a8b450150558dd25fd58)`() const noexcept` | 
+
+## Members
+
+#### `public inline  `[`Element`](#classexperimental_1_1_skip_list_1_1_element_1aa0b05b2e0dd6d3615957bd7d5e991282)`(unsigned size,Element * newNext,TPriv newValue) noexcept` 
+
+#### `public inline virtual  `[`~Element`](#classexperimental_1_1_skip_list_1_1_element_1ace18662b0ca6c3e4501dcf9777f11d0c)`() noexcept` 
+
+#### `public inline Element< TPriv > * `[`getNext`](#classexperimental_1_1_skip_list_1_1_element_1aa11528ac07640a5d1e90e43c66fbfaca)`(unsigned offset) const noexcept` 
+
+#### `public inline void `[`setNext`](#classexperimental_1_1_skip_list_1_1_element_1a6cad818e63d2f05b83d742999c4bd944)`(Element< TPriv > * newValue,unsigned offset) noexcept` 
+
+#### `public inline const TPriv & `[`getValue`](#classexperimental_1_1_skip_list_1_1_element_1a304aeacbb9d1844bbe479ae2f4d53e25)`() const noexcept` 
+
+#### `public inline unsigned `[`size`](#classexperimental_1_1_skip_list_1_1_element_1a07fcea6c4aa6a8b450150558dd25fd58)`() const noexcept` 
 
 Generated by [Moxygen](https://sourcey.com/moxygen)
