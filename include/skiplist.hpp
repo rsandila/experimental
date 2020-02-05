@@ -22,42 +22,43 @@ namespace experimental {
 
         Items in the list are considered constant and modifications of the objects will not re-sort the list.
     */
+    template <class TPriv> class SLElement {
+    private:
+        std::vector<SLElement<TPriv>*> next;
+        TPriv value;
+    public:
+        SLElement(unsigned size, SLElement* newNext = nullptr, TPriv newValue = TPriv()) noexcept : value(newValue) {
+            next.resize(size);
+            for (unsigned i = 0; i < size; i++) {
+                next[i] = newNext;
+            }
+        }
+        virtual ~SLElement() noexcept {
+            next.clear();
+        }
+        SLElement<TPriv>* getNext(unsigned offset) const noexcept {
+            if (offset >= size()) {
+                return nullptr;
+            }
+            return next[offset];
+        }
+        void setNext(SLElement<TPriv>* newValue, unsigned offset) noexcept {
+            if (offset >= size()) {
+                next.resize(offset + 1);
+            }
+            next[offset] = newValue;
+        }
+        const TPriv& getValue() const noexcept {
+            return value;
+        }
+        unsigned size() const noexcept {
+            return next.size();
+        }
+    };
     template <class T> class SkipList {
     private:
-        template <class TPriv> class Element {
-        private:
-            std::vector<Element<TPriv> *> next;
-            TPriv value;
-        public:
-            Element(unsigned size, Element* newNext = nullptr, TPriv newValue = TPriv()) noexcept : value(newValue) {
-                next.resize(size);
-                for (unsigned i = 0; i < size; i++) {
-                    next[i] = newNext;
-                }
-            }
-            virtual ~Element() noexcept {
-                next.clear();
-            }
-            Element<TPriv>* getNext(unsigned offset) const noexcept { 
-                if (offset >= size()) {
-                    return nullptr;
-                }
-                return next[offset]; 
-            }
-            void setNext(Element<TPriv> * newValue, unsigned offset) noexcept { 
-                if (offset >= size()) {
-                    next.resize(offset + 1);
-                }
-                next[offset] = newValue; 
-            }
-            const TPriv & getValue() const noexcept { 
-                return value; 
-            }
-            unsigned size() const noexcept {
-                return next.size();
-            }
-        };
-        Element<T> * head, * z;
+        SLElement<T> * head;
+        SLElement<T> * z;
         
         unsigned N, lgN;
         unsigned lgNMax;
@@ -69,10 +70,10 @@ namespace experimental {
         /*! \brief Constructor
             \param _lgNMax A magic number that controls how big the skiplist can get. Experimentation should be used to find an optimal value for your data
         */
-        SkipList(unsigned _lgNMax = 4) : lgNMax(_lgNMax), N(0), lgN(0), distribution(0, RAND_MAX) {
+        SkipList(unsigned _lgNMax = 4) : N(0), lgN(0), lgNMax(_lgNMax), distribution(0, RAND_MAX) {
             // order matters
-            z = new Element<T>(0);
-            head = new Element<T>(_lgNMax, z);
+            z = new SLElement<T>(0);
+            head = new SLElement<T>(_lgNMax, z);
         }
         /*! \brief Destructor
         */
@@ -89,7 +90,7 @@ namespace experimental {
             \param value The value to add
         */
         void add(const T value) noexcept {
-            addHelper(head, new Element<T>(randX(), z, value), lgN);
+            addHelper(head, new SLElement<T>(randX(), z, value), lgN);
             N += 1;
         }
         /*! \brief Finds a value in the list. T must implement < and ==
@@ -145,7 +146,7 @@ namespace experimental {
             \param x The node to add 
             \param k The current working offset 
             */
-        void addHelper(Element<T>* t, Element<T>* x, unsigned k) noexcept {
+        void addHelper(SLElement<T>* t, SLElement<T>* x, unsigned k) noexcept {
             auto next = t->getNext(k);
             if (next == nullptr) {
                 next = z;
@@ -172,7 +173,7 @@ namespace experimental {
             \param t The current node to search
             \param value The value to match 
             */
-        Element<T>* findHelper(Element<T>* t, const T& value) const noexcept {
+        SLElement<T>* findHelper(SLElement<T>* t, const T& value) const noexcept {
             if (t == nullptr || t == z) {
                 return z;
             }
@@ -201,7 +202,7 @@ namespace experimental {
         }
         /*! \brief Used by the destructor to cleanup recursively
         */
-        void deleteHelper(Element<T>* item) noexcept {
+        void deleteHelper(SLElement<T>* item) noexcept {
             if (item == nullptr || item == z) {
                 return;
             }
@@ -213,7 +214,7 @@ namespace experimental {
     template <class T> class SkipListIterator {
     private:
         const SkipList<T>& list;
-        SkipList<T>::Element<T>* cursor;
+        SLElement<T> * cursor;
         bool endValue;
     public:
         friend class SkipList<T>;
@@ -282,7 +283,7 @@ namespace experimental {
             \param value SkipList used by iterator
             \param item The current position in the list
         */
-        SkipListIterator(const SkipList<T>& value, SkipList<T>::Element<T>* item) noexcept : list(value), cursor(item) {
+        SkipListIterator(const SkipList<T>& value, SLElement<T>* item) noexcept : list(value), cursor(item) {
             if (cursor == nullptr) {
                 cursor = list.z;
             }
@@ -293,7 +294,7 @@ namespace experimental {
             \param value SkipList used by iterator
             \param end Is this the end marker?
         */
-        SkipListIterator(const SkipList<T>& value, bool end) noexcept : list(value), endValue(end), cursor(list.head->getNext(0)) {
+        SkipListIterator(const SkipList<T>& value, bool end) noexcept : list(value), cursor(list.head->getNext(0)), endValue(end) {
             if (cursor == nullptr || endValue) {
                 cursor = list.z;
             }
