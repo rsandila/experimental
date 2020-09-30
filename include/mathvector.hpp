@@ -89,15 +89,23 @@ namespace experimental {
 		}
 #if SUPPORTS_CPP_20
 		inline std::strong_ordering operator<=>(const MathVector<T>& rhs) const {
+			if (contents.size() != rhs.contents.size()) {
+				throw new std::logic_error();
+			}
 			auto myMag = magnitude();
 			auto rhsMag = rhs.magnitude();
 			if (myMag < rhsMag) {
 				return std::strong_ordering::less;
 			}
-			if (myMag == rhsMag) {
-				return std::strong_ordering::equal;
+			if (myMag > rhsMag) {
+				return std::strong_ordering::greater;
 			}
-			return std::strong_ordering::greater;
+			for (size_t i = 0; i < lhs.contents.size(); i++) {
+				if (lhs.contents[i] != rhs.contents[i]) {
+					return std::strong_ordering::equivalent;
+				}
+			}
+			return std::strong_ordering::equal;
 		}
 #endif
 		/*! \brief Less than operator
