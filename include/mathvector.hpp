@@ -104,7 +104,7 @@ namespace experimental {
 			if (lhs.contents.size() != rhs.contents.size()) {
 				return false;
 			}
-			for (int i = 0; i < lhs.contents.size(); i++) {
+			for (size_t i = 0; i < lhs.contents.size(); i++) {
 				if (lhs.contents[i] != rhs.contents[i]) {
 					return false;
 				}
