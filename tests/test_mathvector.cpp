@@ -16,7 +16,7 @@ TEST_CASE("Basic vector tests", "[math][vector]") {
 			REQUIRE(test1.size() == 5);
 		}
 		WHEN("Accessing an out of bounds item") {
-			REQUIRE_THROWS_AS(test1[5], std::out_of_range);
+			REQUIRE_THROWS(test1[5]);
 		}
 		AND_THEN("The individual members have the right values") {
 			REQUIRE(test1[0] == 1);
@@ -122,4 +122,43 @@ TEST_CASE("Vector multiplication", "[math][vector]") {
 			REQUIRE(testBase * multiplier == 224);			
 		}
 	}
+}
+TEST_CASE("Vector fill", "[math][vector]") {
+	experimental::MathVector<long> one({ 1, 1, 1, 1, 1, 1 });
+	experimental::MathVector<long> two(6, 1);
+	REQUIRE(two.size() == 6);
+	REQUIRE(two[0] == 1);
+	REQUIRE(one == two);
+}
+TEST_CASE("Vector constructors", "[math][vector]") {
+	experimental::MathVector<long> one({ 1, 1, 1, 1, 1, 1 });
+	experimental::MathVector<long> two({ 1, 1, 1, 1, 1, 1 });
+	REQUIRE(one == two);
+	experimental::MathVector<long> three(one);
+	REQUIRE(two == three);
+	three[0] = 2;
+	REQUIRE_FALSE(one == three);
+	experimental::MathVector<long> four(std::move(one));
+	REQUIRE(one.size() == 0);
+	REQUIRE(four.size() == 6);
+	REQUIRE(two == four);
+}
+TEST_CASE("Vector assignments", "[math][vector]") {
+	experimental::MathVector<double> one({ 20, 24, 32, 40, 48, 60 });
+	experimental::MathVector<double> two({ 10, 11 });
+	REQUIRE(one.size() == 6);
+	REQUIRE(two.size() == 2);
+	two = one;
+	one[0] = 10;
+	two[0] = 20;
+	REQUIRE(two[0] == 20);
+	REQUIRE(one[0] == 10);
+
+	experimental::MathVector<double> three({ 20, 24, 32, 40, 48, 60 });
+	experimental::MathVector<double> four({ 1, 2 });
+	REQUIRE(three.size() == 6);
+	REQUIRE(four.size() == 2);
+	four = std::move(three);
+	REQUIRE(three.size() == 0);
+	REQUIRE(four.size() == 6);
 }

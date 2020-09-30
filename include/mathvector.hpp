@@ -9,6 +9,9 @@
 
 #pragma once
 
+#if SUPPORTS_CPP_20
+#include <compare>
+#endif
 #include <exception>
 #include <math.h> 
 #include <vector>
@@ -27,13 +30,26 @@ namespace experimental {
 		*/
 		MathVector() {
 		}
+		/*! \brief Fill constructor 
+		\param size The size of the vector
+		\param fill The value to populate the vector with */
+		MathVector(size_t size, T fill) {
+			contents.resize(size, fill);			
+		}
 		/*! \brief Copy constructor 
 		* \param other Other vector to copy
 		*/
 		MathVector(const MathVector& other) {
 			contents = other.contents;
 		}
-		/*! \brief List constructor 
+		/*! \brief Move constructor
+		* \param other Other vector to move from
+		*/
+		MathVector(MathVector&& other) {
+			contents = other.contents;
+			other.contents.clear();
+		}
+		/*! \brief List constructor
 		* \param list List of values to assign
 		*/
 		MathVector(const std::initializer_list<T> list) {
@@ -46,6 +62,7 @@ namespace experimental {
 			if (this != &other) {
 				contents = other.contents;
 			}
+			return *this;
 		}
 		/*! \brief Move operator 
 		\param other Other vector to move from */
@@ -54,6 +71,7 @@ namespace experimental {
 				contents = std::move(other.contents);
 				other.contents.clear();
 			}
+			return *this;
 		}
 		/*! \brief Returns the size of the vector 
 		\returns Size of the vector */
@@ -69,6 +87,19 @@ namespace experimental {
 			}
 			return (T)sqrt(value);
 		}
+#if SUPPORTS_CPP_20
+		inline std::strong_ordering operator<=>(const MathVector<T>& rhs) const {
+			auto myMag = magnitude();
+			auto rhsMag = rhs.magnitude();
+			if (myMag < rhsMag) {
+				return std::strong_ordering::less;
+			}
+			if (myMag == rhsMag) {
+				return std::strong_ordering::equal;
+			}
+			return std::strong_ordering::greater;
+		}
+#endif
 		/*! \brief Less than operator
 		* \param lhs First vector to compare
 		* \param rhs Second vector to compare
@@ -120,7 +151,15 @@ namespace experimental {
 		/*! \brief Array subscript operator. Allows individual scalars in the vector to be accessed. Will throw exception on out of bounds access 
 		\param idx Offset into vector 
 		\returns Indexed scalar from vector */
-		inline const T& operator[](std::size_t idx) const { return contents.at(idx); }
+		inline T& operator[](std::size_t idx) { 
+			if (idx >= contents.size()) {
+				throw new std::out_of_range("idx too big");
+			}
+			return contents[idx]; 
+		}
+		inline const T& operator[](std::size_t idx) const {
+			return contents.at(idx);
+		}
 		/*! \brief operator +=. Adds a vector to the current one. If the vectors are not the same size then it will throw an exception
 		\param rhs vector to add 
 		\returns An instance of the target vector */
