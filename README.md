@@ -72,3 +72,8 @@ links that can skip other links allows for finding items faster than you would i
 The algorithm looks expensive for inserting as multiple links can be updated on insertion but balancing that
 against a tree rebalance or a memory move as you would get in a std::vector it may just end up not being as
 expensive as you think. It will probably be most efficient for larger data sets.
+
+### mathvector.hpp
+
+Simple vector math. Adding, subtracting, dot product and multiplying by a scalar. Why no cross product? I could
+not find a generic algorithm for vectors larger than 3 in size. It seems to work, probably not super fast.

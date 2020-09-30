@@ -4,7 +4,6 @@
 --------------------------------|---------------------------------------------
 `namespace `[`experimental`](#namespaceexperimental) | 
 `class `[`experimental::SingleLinkedList::Element`](#classexperimental_1_1_single_linked_list_1_1_element) | 
-`class `[`experimental::SkipList::Element`](#classexperimental_1_1_skip_list_1_1_element) | 
 
 # namespace `experimental` 
 
@@ -12,12 +11,124 @@
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
+`class `[`experimental::MathVector`](#classexperimental_1_1_math_vector) | A class to do simple vector math.
 `class `[`experimental::SingleLinkedList`](#classexperimental_1_1_single_linked_list) | A single linked list.
 `class `[`experimental::SingleLinkedListIterator`](#classexperimental_1_1_single_linked_list_iterator) | Iterator helper for [SingleLinkedList](#classexperimental_1_1_single_linked_list).
-`class `[`experimental::SkipList`](#classexperimental_1_1_skip_list) | Skip List.
+`class `[`experimental::SkipList`](#classexperimental_1_1_skip_list) | 
 `class `[`experimental::SkipListIterator`](#classexperimental_1_1_skip_list_iterator) | 
+`class `[`experimental::SLElement`](#classexperimental_1_1_s_l_element) | Skip List.
 `class `[`experimental::SortedList`](#classexperimental_1_1_sorted_list) | A simple sorted list that tries to be efficient.
 `class `[`experimental::SortedListIterator`](#classexperimental_1_1_sorted_list_iterator) | Iterator helper for [SortedList](#classexperimental_1_1_sorted_list).
+
+# class `experimental::MathVector` 
+
+A class to do simple vector math.
+
+Called [MathVector](#classexperimental_1_1_math_vector) so as to not confuse with std::vector
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline  `[`MathVector`](#classexperimental_1_1_math_vector_1af82c1b6c6e6c92668f685e8a51cbbe7c)`()` | Default constructor.
+`public inline  `[`MathVector`](#classexperimental_1_1_math_vector_1ab48e298d012d0f932cf079fb1a65a7fe)`(const `[`MathVector`](#classexperimental_1_1_math_vector)` & other)` | Copy constructor.
+`public inline  `[`MathVector`](#classexperimental_1_1_math_vector_1a50e0a8fa1b47a5e502e26de69e1f402b)`(const std::initializer_list< T > list)` | List constructor.
+`public inline `[`MathVector`](#classexperimental_1_1_math_vector)`< T > & `[`operator=`](#classexperimental_1_1_math_vector_1a7ab63baa4dff9b81fceea36b745fbe50)`(const `[`MathVector`](#classexperimental_1_1_math_vector)`< T > & other)` | Assignment operator.
+`public inline `[`MathVector`](#classexperimental_1_1_math_vector)`< T > & `[`operator=`](#classexperimental_1_1_math_vector_1ac4b315e5eed97e92883c5789672e4283)`(`[`MathVector`](#classexperimental_1_1_math_vector)`< T > && other) noexcept` | Move operator.
+`public inline size_t `[`size`](#classexperimental_1_1_math_vector_1ae8829ab480412060eba3a3caef78c225)`() const noexcept` | Returns the size of the vector.
+`public inline T `[`magnitude`](#classexperimental_1_1_math_vector_1ad7a17f6393b8aeb1badf50092021cd87)`() const noexcept` | Calculates the magnitude of the vector.
+`public inline const T & `[`operator[]`](#classexperimental_1_1_math_vector_1af40e6d331960a62da43becfb4e020157)`(std::size_t idx) const` | Array subscript operator. Allows individual scalars in the vector to be accessed. Will throw exception on out of bounds access.
+`public inline `[`MathVector`](#classexperimental_1_1_math_vector)`< T > & `[`operator+=`](#classexperimental_1_1_math_vector_1a16087f53170807f0e68f4074d4b4edf4)`(const `[`MathVector`](#classexperimental_1_1_math_vector)`< T > & rhs)` | operator +=. Adds a vector to the current one. If the vectors are not the same size then it will throw an exception
+`public inline `[`MathVector`](#classexperimental_1_1_math_vector)`< T > & `[`operator-=`](#classexperimental_1_1_math_vector_1a76b154c0a55bd4ad64d78de5b1e62307)`(const `[`MathVector`](#classexperimental_1_1_math_vector)`< T > & rhs)` | operator -=. Subtracts a vector from the current one. If the vectors are not the same size then it will throw an exception
+`public inline `[`MathVector`](#classexperimental_1_1_math_vector)`< T > & `[`operator*=`](#classexperimental_1_1_math_vector_1a5cd1e0cb542ccfebaa9ab4b6e7af4ebf)`(const T & rhs)` | Multiply a vector with a scalar.
+
+## Members
+
+#### `public inline  `[`MathVector`](#classexperimental_1_1_math_vector_1af82c1b6c6e6c92668f685e8a51cbbe7c)`()` 
+
+Default constructor.
+
+#### `public inline  `[`MathVector`](#classexperimental_1_1_math_vector_1ab48e298d012d0f932cf079fb1a65a7fe)`(const `[`MathVector`](#classexperimental_1_1_math_vector)` & other)` 
+
+Copy constructor.
+
+#### Parameters
+* `other` Other vector to copy
+
+#### `public inline  `[`MathVector`](#classexperimental_1_1_math_vector_1a50e0a8fa1b47a5e502e26de69e1f402b)`(const std::initializer_list< T > list)` 
+
+List constructor.
+
+#### Parameters
+* `list` List of values to assign
+
+#### `public inline `[`MathVector`](#classexperimental_1_1_math_vector)`< T > & `[`operator=`](#classexperimental_1_1_math_vector_1a7ab63baa4dff9b81fceea36b745fbe50)`(const `[`MathVector`](#classexperimental_1_1_math_vector)`< T > & other)` 
+
+Assignment operator.
+
+#### Parameters
+* `other` Other vector to assign
+
+#### `public inline `[`MathVector`](#classexperimental_1_1_math_vector)`< T > & `[`operator=`](#classexperimental_1_1_math_vector_1ac4b315e5eed97e92883c5789672e4283)`(`[`MathVector`](#classexperimental_1_1_math_vector)`< T > && other) noexcept` 
+
+Move operator.
+
+#### Parameters
+* `other` Other vector to move from
+
+#### `public inline size_t `[`size`](#classexperimental_1_1_math_vector_1ae8829ab480412060eba3a3caef78c225)`() const noexcept` 
+
+Returns the size of the vector.
+
+#### Returns
+Size of the vector
+
+#### `public inline T `[`magnitude`](#classexperimental_1_1_math_vector_1ad7a17f6393b8aeb1badf50092021cd87)`() const noexcept` 
+
+Calculates the magnitude of the vector.
+
+#### Returns
+The magnitude of the vector
+
+#### `public inline const T & `[`operator[]`](#classexperimental_1_1_math_vector_1af40e6d331960a62da43becfb4e020157)`(std::size_t idx) const` 
+
+Array subscript operator. Allows individual scalars in the vector to be accessed. Will throw exception on out of bounds access.
+
+#### Parameters
+* `idx` Offset into vector 
+
+#### Returns
+Indexed scalar from vector
+
+#### `public inline `[`MathVector`](#classexperimental_1_1_math_vector)`< T > & `[`operator+=`](#classexperimental_1_1_math_vector_1a16087f53170807f0e68f4074d4b4edf4)`(const `[`MathVector`](#classexperimental_1_1_math_vector)`< T > & rhs)` 
+
+operator +=. Adds a vector to the current one. If the vectors are not the same size then it will throw an exception
+
+#### Parameters
+* `rhs` vector to add 
+
+#### Returns
+An instance of the target vector
+
+#### `public inline `[`MathVector`](#classexperimental_1_1_math_vector)`< T > & `[`operator-=`](#classexperimental_1_1_math_vector_1a76b154c0a55bd4ad64d78de5b1e62307)`(const `[`MathVector`](#classexperimental_1_1_math_vector)`< T > & rhs)` 
+
+operator -=. Subtracts a vector from the current one. If the vectors are not the same size then it will throw an exception
+
+#### Parameters
+* `rhs` vector to subtract 
+
+#### Returns
+An instance of the target vector
+
+#### `public inline `[`MathVector`](#classexperimental_1_1_math_vector)`< T > & `[`operator*=`](#classexperimental_1_1_math_vector_1a5cd1e0cb542ccfebaa9ab4b6e7af4ebf)`(const T & rhs)` 
+
+Multiply a vector with a scalar.
+
+#### Parameters
+* `rhs` Scalar 
+
+#### Returns
+Updated vector
 
 # class `experimental::SingleLinkedList` 
 
@@ -246,12 +357,6 @@ The current value
 
 # class `experimental::SkipList` 
 
-Skip List.
-
-A skip list is a mix between a tree and a linked list. It keeps the items in a sorted order but by having links that can skip other links allows for finding items faster than you would in a standard linked list. The algorithm looks expensive for inserting as multiple links can be updated on insertion but balancing that against a tree rebalance or a memory move as you would get in a std::vector it may just end up not being as expensive as you think. It will probably be most efficient for larger data sets.
-
-Items in the list are considered constant and modifications of the objects will not re-sort the list.
-
 ## Summary
 
  Members                        | Descriptions                                
@@ -264,9 +369,9 @@ Items in the list are considered constant and modifications of the objects will 
 `public inline `[`SkipListIterator`](#classexperimental_1_1_skip_list_iterator)`< T > `[`begin`](#classexperimental_1_1_skip_list_1a4e78931a58173885ca93ebda3e3c9316)`() noexcept` | Returns iterator for use in loops.
 `public inline const `[`SkipListIterator`](#classexperimental_1_1_skip_list_iterator)`< T > `[`end`](#classexperimental_1_1_skip_list_1af32847efc2539a34e1864b8afb80ac09)`() noexcept` | Returns end iterator for use in loops.
 `protected inline unsigned `[`randX`](#classexperimental_1_1_skip_list_1a8850b5a5cf76e050282e432f96f22fca)`() noexcept` | Returns a random size for a node.
-`protected inline void `[`addHelper`](#classexperimental_1_1_skip_list_1a014e9a7870a1e1ab1417245ca869d70b)`(Element< T > * t,Element< T > * x,unsigned k) noexcept` | Recursively adds an item to a node.
-`protected inline Element< T > * `[`findHelper`](#classexperimental_1_1_skip_list_1a5ffa9813457742b28789396cffd74d06)`(Element< T > * t,const T & value) const noexcept` | Recursively finds value in the list.
-`protected inline void `[`deleteHelper`](#classexperimental_1_1_skip_list_1af99ba5322c13f8d7bdad3dc9c8fbb1b8)`(Element< T > * item) noexcept` | Used by the destructor to cleanup recursively.
+`protected inline void `[`addHelper`](#classexperimental_1_1_skip_list_1a433baae50e676513372d13f5128e5bcc)`(`[`SLElement`](#classexperimental_1_1_s_l_element)`< T > * t,`[`SLElement`](#classexperimental_1_1_s_l_element)`< T > * x,unsigned k) noexcept` | Recursively adds an item to a node.
+`protected inline `[`SLElement`](#classexperimental_1_1_s_l_element)`< T > * `[`findHelper`](#classexperimental_1_1_skip_list_1a261a20a57356d5bf59295a722fae65e8)`(`[`SLElement`](#classexperimental_1_1_s_l_element)`< T > * t,const T & value) const noexcept` | Recursively finds value in the list.
+`protected inline void `[`deleteHelper`](#classexperimental_1_1_skip_list_1a161b79f98011401cc968d65d43c681f1)`(`[`SLElement`](#classexperimental_1_1_s_l_element)`< T > * item) noexcept` | Used by the destructor to cleanup recursively.
 
 ## Members
 
@@ -328,7 +433,7 @@ Updates lgN
 #### Returns
 A size that will be < lgNMax and >= 1
 
-#### `protected inline void `[`addHelper`](#classexperimental_1_1_skip_list_1a014e9a7870a1e1ab1417245ca869d70b)`(Element< T > * t,Element< T > * x,unsigned k) noexcept` 
+#### `protected inline void `[`addHelper`](#classexperimental_1_1_skip_list_1a433baae50e676513372d13f5128e5bcc)`(`[`SLElement`](#classexperimental_1_1_s_l_element)`< T > * t,`[`SLElement`](#classexperimental_1_1_s_l_element)`< T > * x,unsigned k) noexcept` 
 
 Recursively adds an item to a node.
 
@@ -339,7 +444,7 @@ Recursively adds an item to a node.
 
 * `k` The current working offset
 
-#### `protected inline Element< T > * `[`findHelper`](#classexperimental_1_1_skip_list_1a5ffa9813457742b28789396cffd74d06)`(Element< T > * t,const T & value) const noexcept` 
+#### `protected inline `[`SLElement`](#classexperimental_1_1_s_l_element)`< T > * `[`findHelper`](#classexperimental_1_1_skip_list_1a261a20a57356d5bf59295a722fae65e8)`(`[`SLElement`](#classexperimental_1_1_s_l_element)`< T > * t,const T & value) const noexcept` 
 
 Recursively finds value in the list.
 
@@ -351,7 +456,7 @@ z if not found, otherwise the node
 
 * `value` The value to match
 
-#### `protected inline void `[`deleteHelper`](#classexperimental_1_1_skip_list_1af99ba5322c13f8d7bdad3dc9c8fbb1b8)`(Element< T > * item) noexcept` 
+#### `protected inline void `[`deleteHelper`](#classexperimental_1_1_skip_list_1a161b79f98011401cc968d65d43c681f1)`(`[`SLElement`](#classexperimental_1_1_s_l_element)`< T > * item) noexcept` 
 
 Used by the destructor to cleanup recursively.
 
@@ -366,7 +471,7 @@ Used by the destructor to cleanup recursively.
 `public inline const T & `[`operator++`](#classexperimental_1_1_skip_list_iterator_1a99a8a267db7c3a33b6954331e4eaf586)`()` | Advances the iterator.
 `public inline const T & `[`operator++`](#classexperimental_1_1_skip_list_iterator_1af476ca42e1eb56a9e6b654e8ea2fb64e)`(int)` | Advances the iterator.
 `public inline const T & `[`operator*`](#classexperimental_1_1_skip_list_iterator_1aaa61547b96fb0a2972752267f4c0a1eb)`() noexcept` | Pointer operator used by loops.
-`protected inline  `[`SkipListIterator`](#classexperimental_1_1_skip_list_iterator_1a04f9e03fc579d0ab5b942b59d678f58e)`(const `[`SkipList`](#classexperimental_1_1_skip_list)`< T > & value,`[`SkipList`](#classexperimental_1_1_skip_list)`< T >::Element< T > * item) noexcept` | Constructor.
+`protected inline  `[`SkipListIterator`](#classexperimental_1_1_skip_list_iterator_1a4ada8e6b5dfb61e330dbdea31e63367c)`(const `[`SkipList`](#classexperimental_1_1_skip_list)`< T > & value,`[`SLElement`](#classexperimental_1_1_s_l_element)`< T > * item) noexcept` | Constructor.
 `protected inline  `[`SkipListIterator`](#classexperimental_1_1_skip_list_iterator_1a68e1df21c799b41bc6f48ffdf119e142)`(const `[`SkipList`](#classexperimental_1_1_skip_list)`< T > & value,bool end) noexcept` | Constructor.
 `protected inline bool `[`hasNext`](#classexperimental_1_1_skip_list_iterator_1a65db39ff5620d81cc63619cc8448c24a)`() const noexcept` | Returns whether we are at the end of the list or not.
 
@@ -413,7 +518,7 @@ Pointer operator used by loops.
 #### Returns
 The current value
 
-#### `protected inline  `[`SkipListIterator`](#classexperimental_1_1_skip_list_iterator_1a04f9e03fc579d0ab5b942b59d678f58e)`(const `[`SkipList`](#classexperimental_1_1_skip_list)`< T > & value,`[`SkipList`](#classexperimental_1_1_skip_list)`< T >::Element< T > * item) noexcept` 
+#### `protected inline  `[`SkipListIterator`](#classexperimental_1_1_skip_list_iterator_1a4ada8e6b5dfb61e330dbdea31e63367c)`(const `[`SkipList`](#classexperimental_1_1_skip_list)`< T > & value,`[`SLElement`](#classexperimental_1_1_s_l_element)`< T > * item) noexcept` 
 
 Constructor.
 
@@ -434,6 +539,39 @@ Constructor.
 #### `protected inline bool `[`hasNext`](#classexperimental_1_1_skip_list_iterator_1a65db39ff5620d81cc63619cc8448c24a)`() const noexcept` 
 
 Returns whether we are at the end of the list or not.
+
+# class `experimental::SLElement` 
+
+Skip List.
+
+A skip list is a mix between a tree and a linked list. It keeps the items in a sorted order but by having links that can skip other links allows for finding items faster than you would in a standard linked list. The algorithm looks expensive for inserting as multiple links can be updated on insertion but balancing that against a tree rebalance or a memory move as you would get in a std::vector it may just end up not being as expensive as you think. It will probably be most efficient for larger data sets.
+
+Items in the list are considered constant and modifications of the objects will not re-sort the list.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline  `[`SLElement`](#classexperimental_1_1_s_l_element_1aa5ab7842d143895d082886085ebc637f)`(unsigned size,`[`SLElement`](#classexperimental_1_1_s_l_element)` * newNext,TPriv newValue) noexcept` | 
+`public inline virtual  `[`~SLElement`](#classexperimental_1_1_s_l_element_1a252ecbf0148166f90d088679020bbd1e)`() noexcept` | 
+`public inline `[`SLElement`](#classexperimental_1_1_s_l_element)`< TPriv > * `[`getNext`](#classexperimental_1_1_s_l_element_1aa6f1f902289549af8e6317354f32e4db)`(unsigned offset) const noexcept` | 
+`public inline void `[`setNext`](#classexperimental_1_1_s_l_element_1a2bf0c8c668a2e504f4d431fb4e934efa)`(`[`SLElement`](#classexperimental_1_1_s_l_element)`< TPriv > * newValue,unsigned offset) noexcept` | 
+`public inline const TPriv & `[`getValue`](#classexperimental_1_1_s_l_element_1a6d80dd7e03827efb5dc9307c8972c261)`() const noexcept` | 
+`public inline unsigned `[`size`](#classexperimental_1_1_s_l_element_1a6368302356f72f067988a1063af10620)`() const noexcept` | 
+
+## Members
+
+#### `public inline  `[`SLElement`](#classexperimental_1_1_s_l_element_1aa5ab7842d143895d082886085ebc637f)`(unsigned size,`[`SLElement`](#classexperimental_1_1_s_l_element)` * newNext,TPriv newValue) noexcept` 
+
+#### `public inline virtual  `[`~SLElement`](#classexperimental_1_1_s_l_element_1a252ecbf0148166f90d088679020bbd1e)`() noexcept` 
+
+#### `public inline `[`SLElement`](#classexperimental_1_1_s_l_element)`< TPriv > * `[`getNext`](#classexperimental_1_1_s_l_element_1aa6f1f902289549af8e6317354f32e4db)`(unsigned offset) const noexcept` 
+
+#### `public inline void `[`setNext`](#classexperimental_1_1_s_l_element_1a2bf0c8c668a2e504f4d431fb4e934efa)`(`[`SLElement`](#classexperimental_1_1_s_l_element)`< TPriv > * newValue,unsigned offset) noexcept` 
+
+#### `public inline const TPriv & `[`getValue`](#classexperimental_1_1_s_l_element_1a6d80dd7e03827efb5dc9307c8972c261)`() const noexcept` 
+
+#### `public inline unsigned `[`size`](#classexperimental_1_1_s_l_element_1a6368302356f72f067988a1063af10620)`() const noexcept` 
 
 # class `experimental::SortedList` 
 
@@ -649,32 +787,5 @@ Constructor.
 #### `public inline void `[`setNext`](#classexperimental_1_1_single_linked_list_1_1_element_1a9c882fe4148300464a78f987e27cc25a)`(Element< TPriv > * newValue) noexcept` 
 
 #### `public inline TPriv `[`getValue`](#classexperimental_1_1_single_linked_list_1_1_element_1a5fcfd25bac225ee5bcc34219889e75f9)`() const noexcept` 
-
-# class `experimental::SkipList::Element` 
-
-## Summary
-
- Members                        | Descriptions                                
---------------------------------|---------------------------------------------
-`public inline  `[`Element`](#classexperimental_1_1_skip_list_1_1_element_1aa0b05b2e0dd6d3615957bd7d5e991282)`(unsigned size,Element * newNext,TPriv newValue) noexcept` | 
-`public inline virtual  `[`~Element`](#classexperimental_1_1_skip_list_1_1_element_1ace18662b0ca6c3e4501dcf9777f11d0c)`() noexcept` | 
-`public inline Element< TPriv > * `[`getNext`](#classexperimental_1_1_skip_list_1_1_element_1aa11528ac07640a5d1e90e43c66fbfaca)`(unsigned offset) const noexcept` | 
-`public inline void `[`setNext`](#classexperimental_1_1_skip_list_1_1_element_1a6cad818e63d2f05b83d742999c4bd944)`(Element< TPriv > * newValue,unsigned offset) noexcept` | 
-`public inline const TPriv & `[`getValue`](#classexperimental_1_1_skip_list_1_1_element_1a304aeacbb9d1844bbe479ae2f4d53e25)`() const noexcept` | 
-`public inline unsigned `[`size`](#classexperimental_1_1_skip_list_1_1_element_1a07fcea6c4aa6a8b450150558dd25fd58)`() const noexcept` | 
-
-## Members
-
-#### `public inline  `[`Element`](#classexperimental_1_1_skip_list_1_1_element_1aa0b05b2e0dd6d3615957bd7d5e991282)`(unsigned size,Element * newNext,TPriv newValue) noexcept` 
-
-#### `public inline virtual  `[`~Element`](#classexperimental_1_1_skip_list_1_1_element_1ace18662b0ca6c3e4501dcf9777f11d0c)`() noexcept` 
-
-#### `public inline Element< TPriv > * `[`getNext`](#classexperimental_1_1_skip_list_1_1_element_1aa11528ac07640a5d1e90e43c66fbfaca)`(unsigned offset) const noexcept` 
-
-#### `public inline void `[`setNext`](#classexperimental_1_1_skip_list_1_1_element_1a6cad818e63d2f05b83d742999c4bd944)`(Element< TPriv > * newValue,unsigned offset) noexcept` 
-
-#### `public inline const TPriv & `[`getValue`](#classexperimental_1_1_skip_list_1_1_element_1a304aeacbb9d1844bbe479ae2f4d53e25)`() const noexcept` 
-
-#### `public inline unsigned `[`size`](#classexperimental_1_1_skip_list_1_1_element_1a07fcea6c4aa6a8b450150558dd25fd58)`() const noexcept` 
 
 Generated by [Moxygen](https://sourcey.com/moxygen)
