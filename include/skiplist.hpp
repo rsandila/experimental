@@ -3,7 +3,7 @@
 //  experimental
 //
 //  Created by Robert Sandilands on 1/28/20.
-//  Copyright © 2020 Robert Sandilands. All rights reserved.
+//  Copyright @ 2020 Robert Sandilands. All rights reserved.
 //
 //  Check LICENSE file for License
 #pragma once
@@ -11,9 +11,13 @@
 #include <vector>
 #include <memory>
 #include <random>
+#include <stdexcept>
+#include <optional>
 
-namespace experimental {    
+namespace experimental {
+
     template <class T> class SkipListIterator;
+
     /*! \brief Skip List
 
         A skip list is a mix between a tree and a linked list. It keeps the items in a sorted order but by having links that can skip other links allows for finding items faster
@@ -21,6 +25,8 @@ namespace experimental {
         or a memory move as you would get in a std::vector it may just end up not being as expensive as you think. It will probably be most efficient for larger data sets.
 
         Items in the list are considered constant and modifications of the objects will not re-sort the list.
+
+        The skiplist is not threadsafe.
     */
     template <class TPriv> class SLElement {
     private:
@@ -55,11 +61,12 @@ namespace experimental {
             return next.size();
         }
     };
+
     template <class T> class SkipList {
     private:
-        SLElement<T> * head;
-        SLElement<T> * z;
-        
+        SLElement<T>* head;
+        SLElement<T>* z;
+
         unsigned N, lgN;
         unsigned lgNMax;
         std::default_random_engine generator;
@@ -71,6 +78,9 @@ namespace experimental {
             \param _lgNMax A magic number that controls how big the skiplist can get. Experimentation should be used to find an optimal value for your data
         */
         SkipList(unsigned _lgNMax = 4) : N(0), lgN(0), lgNMax(_lgNMax), distribution(0, RAND_MAX) {
+            if (_lgNMax < 1 || _lgNMax > 32) { // Reasonable limits for demonstration
+                throw std::invalid_argument("_lgNMax must be between 1 and 32");
+            }
             // order matters
             z = new SLElement<T>(0);
             head = new SLElement<T>(_lgNMax, z);
@@ -89,19 +99,31 @@ namespace experimental {
         /*! \brief Adds an item to the list and keep the list in sorted order
             \param value The value to add
         */
-        void add(const T value) noexcept {
-            addHelper(head, new SLElement<T>(randX(), z, value), lgN);
-            N += 1;
+        void add(const T value) {
+            try {
+                addHelper(head, new SLElement<T>(randX(), z, value), lgN);
+                N += 1;
+            }
+            catch (const std::exception& e) {
+                throw std::runtime_error("Failed to add element: " + std::string(e.what()));
+            }
         }
         /*! \brief Finds a value in the list. T must implement < and ==
             \param value The value to find
             \returns end() if not found, otherwise an iterator to the value
         */
         SkipListIterator<T> find(const T value) {
-            return std::move(SkipListIterator<T>(*this, findHelper(head, value)));
+            try {
+                SLElement<T>* element = findHelper(head, value);
+                return std::move(SkipListIterator<T>(*this, element));
+            }
+            catch (const std::exception& e) {
+                throw std::runtime_error("Failed to find element: " + std::string(e.what()));
+            }
         }
-        /*! \brief Returns true if the list is empty 
-            \returns True if the list is empty */
+        /*! \brief Returns true if the list is empty
+            \returns True if the list is empty
+        */
         bool isEmpty() noexcept {
             return N == 0;
         }
@@ -110,14 +132,24 @@ namespace experimental {
             \returns SkipListIterator
         */
         SkipListIterator<T> begin() noexcept {
-            return std::move(SkipListIterator<T>(*this, false));
+            try {
+                return std::move(SkipListIterator<T>(*this, false));
+            }
+            catch (const std::exception& e) {
+                throw std::runtime_error("Failed to get beginning iterator: " + std::string(e.what()));
+            }
         }
         /*! \brief Returns end iterator for use in loops
 
           \returns SkipListIterator
         */
         const SkipListIterator<T> end() noexcept {
-            return std::move(SkipListIterator<T>(*this, true));
+            try {
+                return std::move(SkipListIterator<T>(*this, true));
+            }
+            catch (const std::exception& e) {
+                throw std::runtime_error("Failed to get end iterator: " + std::string(e.what()));
+            }
         }
     protected:
         /*! \brief Returns a random size for a node
@@ -127,9 +159,9 @@ namespace experimental {
             \returns A size that will be < lgNMax and >= 1
         */
         unsigned randX() noexcept {
-            
+
             unsigned i, j;
-            unsigned t = distribution(generator);  
+            unsigned t = distribution(generator);
 
             for (i = 1, j = 2; i < lgNMax; i++, j += j) {
                 if (t > RAND_MAX / j) {
@@ -141,11 +173,11 @@ namespace experimental {
             }
             return i;
         }
-        /*! \brief Recursively adds an item to a node 
+        /*! \brief Recursively adds an item to a node
             \param t The current node to process
-            \param x The node to add 
-            \param k The current working offset 
-            */
+            \param x The node to add
+            \param k The current working offset
+        */
         void addHelper(SLElement<T>* t, SLElement<T>* x, unsigned k) noexcept {
             auto next = t->getNext(k);
             if (next == nullptr) {
@@ -168,11 +200,11 @@ namespace experimental {
             }
             addHelper(next, x, k);
         }
-        /*! \brief Recursively finds value in the list 
-            \returns z if not found, otherwise the node 
+        /*! \brief Recursively finds value in the list
+            \returns z if not found, otherwise the node
             \param t The current node to search
-            \param value The value to match 
-            */
+            \param value The value to match
+        */
         SLElement<T>* findHelper(SLElement<T>* t, const T& value) const noexcept {
             if (t == nullptr || t == z) {
                 return z;
@@ -214,7 +246,7 @@ namespace experimental {
     template <class T> class SkipListIterator {
     private:
         const SkipList<T>& list;
-        SLElement<T> * cursor;
+        SLElement<T>* cursor;
         bool endValue;
     public:
         friend class SkipList<T>;
@@ -254,7 +286,7 @@ namespace experimental {
         /*! \brief Advances the iterator
           \returns The current value
         */
-        const T & operator ++() noexcept(false) {
+        const T& operator ++() noexcept(false) {
             if (cursor == list.z) {
                 throw new std::out_of_range("Enumerating past the end of the list");
             }
@@ -265,7 +297,7 @@ namespace experimental {
         /*! \brief Advances the iterator
           \returns The current value
         */
-        const T & operator ++(int) noexcept(false) {
+        const T& operator ++(int) noexcept(false) {
             T retval = cursor->getValue();
             ++(*this);
             return retval;

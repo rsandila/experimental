@@ -8,6 +8,7 @@
 //  Check LICENSE file for License
 #include "../3rdparty/Catch2/single_include/catch.hpp"
 #include "../include/skiplist.hpp"
+#include <thread>
 
 TEST_CASE("Empty skip list tests", "[skiplist]") {
 	GIVEN("An empty list") {
@@ -73,3 +74,27 @@ TEST_CASE("Empty skip list tests", "[skiplist]") {
 		}
 	}
 }
+TEST_CASE("Iterator exception tests", "[skiplist]") {
+	GIVEN("An empty list") {
+		experimental::SkipList<int> list;
+		WHEN("We try to increment the end iterator") {
+			auto it = list.end();
+			THEN("It throws an out_of_range exception") {
+				REQUIRE_THROWS(++it);
+			}
+		}
+	}
+
+	GIVEN("A populated list") {
+		experimental::SkipList<int> list;
+		list.add(10);
+		WHEN("We increment the end iterator") {
+			auto it = list.end();
+			THEN("It throws an out_of_range exception") {
+				REQUIRE_THROWS(++it);
+			}
+		}
+	}
+}
+
+
