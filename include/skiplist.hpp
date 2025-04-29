@@ -96,6 +96,28 @@ namespace experimental {
             lgN = 0;
             lgNMax = 0;
         }
+        /*
+        * \brief Reverses the skiplist
+        */
+        template <class T>
+        void SkipList<T>::reverse() {
+            // Create a new head for the reversed list
+            SLElement<T>* newHead = new SLElement<T>(lgNMax, z);
+
+            // Iterate through the original list and insert each element at the front of the new list
+            auto current = head->getNext(0);
+            while (current != z) {
+                SLElement<T>* newNode = new SLElement<T>(randX(), nullptr, current->getValue());
+                addHelper(newHead, newNode, lgN);
+
+                // Move to the next element in the original list
+                current = current->getNext(0);
+            }
+
+            // Update head to point to the new reversed list
+            delete head;
+            head = newHead;
+        }
         /*! \brief Adds an item to the list and keep the list in sorted order
             \param value The value to add
         */
